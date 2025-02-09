@@ -6,15 +6,20 @@ import Homepage from './pages/Home/home'
 import About from './pages/About/about'
 import Contact from './pages/Contact/contact'
 import Footer from './components/footer';
+import MensCollection from './pages/Men/men';
+import ProductPage from './pages/Single/single';
 function App() {
   return (
     <div className="App">
-      <Navbar/>
+      
     <BrowserRouter>
+    <Navbar/>
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/about" element={<About/>}/>
         <Route path="/contact" element={<Contact/>}/>
+        <Route path="/men/clothing" element={<MensCollection/>}/>
+        <Route path="product" element={<ProductPage/>}/>
       </Routes>
       </BrowserRouter>
      <Footer/>
