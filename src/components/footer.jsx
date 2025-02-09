@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-bold">Our Story</h3>
             <p className="text-gray-600 text-sm">
-              ONS started as a menswear brand in 2016 focused on versatile styling, consistent fits and comfortable
+              Udobn started as a menswear brand in 2016 focused on versatile styling, consistent fits and comfortable
               fabrics.
             </p>
             <p className="text-gray-600 text-sm">
@@ -33,17 +33,8 @@ export default function Footer() {
               <a href="/about" className="block text-gray-600 hover:text-gray-900">
                 About Us
               </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
-                Press
-              </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
-                Careers
-              </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
-                Gift Card Policy
-              </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
-                Promo Code Terms & Conditions
+              <a href="/contact" className="block text-gray-600 hover:text-gray-900">
+                Contact
               </a>
               <a href="#" className="block text-gray-600 hover:text-gray-900">
                 Wholesale
@@ -55,19 +46,10 @@ export default function Footer() {
             <h3 className="font-bold">Help</h3>
             <div className="space-y-2">
               <a href="#" className="block text-gray-600 hover:text-gray-900">
-                Nice Rewards
-              </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
-                Gift Card Balance
-              </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
                 Returns & Shipping
               </a>
               <a href="#" className="block text-gray-600 hover:text-gray-900">
                 Size Guide
-              </a>
-              <a href="/contact" className="block text-gray-600 hover:text-gray-900">
-                Contact
               </a>
               <a href="#" className="block text-gray-600 hover:text-gray-900">
                 Locations
@@ -75,7 +57,7 @@ export default function Footer() {
               <a href="#" className="block text-gray-600 hover:text-gray-900">
                 Privacy Policy
               </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
+              <a href="/terms" className="block text-gray-600 hover:text-gray-900">
                 Terms & Conditions
               </a>
             </div>
@@ -105,7 +87,7 @@ export default function Footer() {
               <select className="text-sm border rounded p-1">
                 <option>United States (USD $)</option>
               </select>
-              <p className="text-sm text-gray-600">© 2024 ONS Clothing</p>
+              <p className="text-sm text-gray-600">© 2025 Udobn Clothing</p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <img src={googlepay} alt="Google Pay" className="h-7" />

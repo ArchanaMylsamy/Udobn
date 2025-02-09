@@ -7,6 +7,7 @@ import About from './pages/About/about'
 import LoginForm from './pages/Account/login';
 import RegistrationForm from './pages/Account/register';
 import Contact from './pages/Contact/contact'
+import Terms_Conditions from './pages/Terms&Conditions/terms'
 import Footer from './components/footer';
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/login" element={<LoginForm/>}/>
         <Route path="/register" element={<RegistrationForm/>}/>
+        <Route path="/terms" element={<Terms_Conditions/>}/>
       </Routes>
       </BrowserRouter>
      <Footer/>
