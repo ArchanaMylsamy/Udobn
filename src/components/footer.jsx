@@ -30,7 +30,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-bold">Information</h3>
             <div className="space-y-2">
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
+              <a href="/about" className="block text-gray-600 hover:text-gray-900">
                 About Us
               </a>
               <a href="#" className="block text-gray-600 hover:text-gray-900">
@@ -66,7 +66,7 @@ export default function Footer() {
               <a href="#" className="block text-gray-600 hover:text-gray-900">
                 Size Guide
               </a>
-              <a href="#" className="block text-gray-600 hover:text-gray-900">
+              <a href="/contact" className="block text-gray-600 hover:text-gray-900">
                 Contact
               </a>
               <a href="#" className="block text-gray-600 hover:text-gray-900">
