@@ -1,7 +1,10 @@
 "use client"
 
 import { Instagram } from "lucide-react"
-
+import googlepay from '../assets/google_pay.webp'
+import phonepe from '../assets/phone_pe.webp'
+import mastercard from '../assets/master_card.png'
+import visacard from '../assets/visacard.webp'
 export default function Footer() {
   return (
     <footer className="bg-white border-t">
@@ -22,9 +25,6 @@ export default function Footer() {
               believe are fitting to our ethos.
             </p>
             <p className="text-gray-600 text-sm">Join our journey on finding quality goods from around the world!</p>
-            <a href="https://instagram.com" className="inline-block hover:opacity-75">
-              <Instagram className="w-5 h-5" />
-            </a>
           </div>
 
           <div className="space-y-4">
@@ -107,16 +107,11 @@ export default function Footer() {
               </select>
               <p className="text-sm text-gray-600">© 2024 ONS Clothing</p>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <img src="/placeholder.svg?height=20&width=32" alt="American Express" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="Apple Pay" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="Discover" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="Google Pay" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="Mastercard" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="PayPal" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="Shop Pay" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="Venmo" className="h-5" />
-              <img src="/placeholder.svg?height=20&width=32" alt="Visa" className="h-5" />
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <img src={googlepay} alt="Google Pay" className="h-7" />
+              <img src={mastercard} alt="Master Card" className="h-7" />
+              <img src={phonepe} alt="PhonePe" className="h-7" />
+              <img src={visacard} alt="Visa Card" className="h-7" />
             </div>
           </div>
         </div>
@@ -124,4 +119,3 @@ export default function Footer() {
     </footer>
   )
 }
-
