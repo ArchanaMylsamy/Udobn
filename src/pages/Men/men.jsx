@@ -1,17 +1,27 @@
+// src/MensCollection.jsx
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import "./menstyle.css";
+import SimpleCart from "../../components/Cart";
+import { useCart } from "../../context/CartContext";
 
-import { useEffect } from "react"
-import AOS from "aos"
-import "aos/dist/aos.css"
-import "./menstyle.css"
-import mencollections from '../../assets/men-collections.jpg'
 export default function MensCollection() {
+  const { 
+    selectedSizes, 
+    handleSizeSelect, 
+    addToCart, 
+    cartItemsCount, 
+    setIsCartOpen 
+  } = useCart();
+  
   useEffect(() => {
     AOS.init({
       duration: 1000,
       once: true,
-    })
-  }, [])
-
+    });
+  }, []);
+  
   const products = [
     {
       id: 1,
@@ -19,6 +29,7 @@ export default function MensCollection() {
       brand: "O.N.S Clothing",
       price: 118.0,
       image: "/placeholder.svg",
+      color: "Lt Blue",
       sizes: ["S", "M", "L", "XL", "XXL"],
     },
     {
@@ -27,6 +38,7 @@ export default function MensCollection() {
       brand: "O.N.S Clothing",
       price: 118.0,
       image: "/placeholder.svg",
+      color: "Lt Blue",
       sizes: ["S", "M", "L", "XL", "XXL"],
     },
     {
@@ -35,6 +47,7 @@ export default function MensCollection() {
       brand: "O.N.S Clothing",
       price: 128.0,
       image: "/placeholder.svg",
+      color: "Gray",
       sizes: ["S", "M", "L", "XL", "XXL"],
     },
     {
@@ -43,6 +56,7 @@ export default function MensCollection() {
       brand: "O.N.S Clothing",
       price: 98.0,
       image: "/placeholder.svg",
+      color: "White",
       sizes: ["S", "M", "L", "XL", "XXL"],
     },
     {
@@ -51,17 +65,19 @@ export default function MensCollection() {
       brand: "O.N.S Clothing",
       price: 78.0,
       image: "/placeholder.svg",
+      color: "Black",
       sizes: ["OS"],
     },
-  ]
-
+  ];
+  
   return (
     <div className="mens-collection">
       <header className="hero" data-aos="fade-down">
         <div className="logo">Udobn</div>
         <h1>Mens Collection</h1>
+        
       </header>
-
+      
       <main>
         <div className="collection-header">
           <h2 data-aos="fade-right">Shop All Mens</h2>
@@ -76,13 +92,13 @@ export default function MensCollection() {
             </select>
           </div>
         </div>
-
+        
         <div className="products-grid">
           {products.map((product, index) => (
             <div key={product.id} className="product-card" data-aos="fade-up" data-aos-delay={index * 100}>
               <div className="product-image">
                 <img src={product.image || "/placeholder.svg"} alt={product.name} />
-                <button className="quick-buy">Quick buy</button>
+                <button className="quick-buy" onClick={() => addToCart(product)}>Quick buy</button>
               </div>
               <div className="product-info">
                 <span className="brand">{product.brand}</span>
@@ -90,17 +106,29 @@ export default function MensCollection() {
                 <span className="price">${product.price.toFixed(2)}</span>
                 <div className="sizes">
                   {product.sizes.map((size) => (
-                    <span key={size} className="size">
+                    <span 
+                      key={size} 
+                      className={`size ${selectedSizes[product.id] === size ? 'selected' : ''}`}
+                      onClick={() => handleSizeSelect(product.id, size)}
+                    >
                       {size}
                     </span>
                   ))}
                 </div>
+                <button 
+                  className="add-to-cart"
+                  onClick={() => addToCart(product)}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           ))}
         </div>
       </main>
-    </div>
-  )
-}
 
+      {/* Simple Cart Component */}
+      <SimpleCart />
+    </div>
+  );
+}

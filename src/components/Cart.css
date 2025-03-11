@@ -1,0 +1,170 @@
+/* src/components/SimpleCart.css */
+.simple-cart-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .simple-cart-drawer {
+    width: 400px;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .simple-cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .simple-cart-header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .simple-close-cart {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .simple-cart-promo {
+    background-color: #f0f0f0;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .simple-cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  
+  .simple-empty-cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .simple-cart-item {
+    display: flex;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .simple-item-image {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+  }
+  
+  .simple-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .simple-item-details {
+    flex: 1;
+  }
+  
+  .simple-item-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  
+  .simple-item-details h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .simple-remove-item {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .simple-item-details p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .simple-quantity-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .simple-quantity-controls button {
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .simple-quantity-controls input {
+    width: 40px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ddd;
+    margin: 0 5px;
+  }
+  
+  .simple-item-price {
+    font-weight: bold;
+    min-width: 70px;
+    text-align: right;
+  }
+  
+  .simple-cart-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+  
+  .simple-cart-subtotal, .simple-shipping-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .simple-shipping-info span:last-child {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .simple-checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #000;
+    color: white;
+    border: none;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .simple-continue-shopping {
+    width: 100%;
+    padding: 15px;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+  }

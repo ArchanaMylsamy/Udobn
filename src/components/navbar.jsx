@@ -1,18 +1,19 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ShoppingBag, Search, Menu, X, ChevronDown, User, Instagram, ChevronRight } from "lucide-react"
-import cloth_1 from "../assets/cloth-1.jpg"
-import cloth_2 from "../assets/cloth-2.jpg"
+import { ShoppingCart, Search, Menu, X, ChevronDown, User, Instagram, ChevronRight } from "lucide-react"
+import { useCart } from '../context/CartContext';
+import {Link} from "react-router-dom"
+
 import logo from "../assets/udobn_logo.png"
-import { Link } from "react-router-dom"
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeMenu, setActiveMenu] = useState(null)
-  const [activeCategory, setActiveCategory] = useState("All Clothing")
+  const [activeCategory, setActiveCategory] = useState("All Products")
   const [isCountryMenuOpen, setIsCountryMenuOpen] = useState(false)
+  const { cartItemsCount, setIsCartOpen } = useCart();
 
   const countries = [
     { name: "Sweden", currency: "SEK kr" },
@@ -25,72 +26,83 @@ export default function Navbar() {
 
   const menuData = {
     Men: {
-      featuredImage: cloth_1,
+      featuredImage: "/placeholder.svg?height=400&width=300",
       featuredText: "Men's New Collection",
       categories: {
-        "All Clothing": [
-          "New Arrivals",
-          "Trending Now",
-          "Basics",
-          "Activewear",
-          "Occasion Wear"
+        "All Products": [
+          { name: "T-Shirts", link: "/men/clothing" },
+          { name: "Hoodies", link: "/men/hoodies" },
+          { name: "Sweatshirts", link: "/men/sweatshirts" },
+          { name: "Sports T-Shirts", link: "/men/sports-t-shirts" },
         ],
-        "Tops": [
-          "T-Shirts",
-          "Shirts",
-          "Polos",
-          "Sweatshirts",
-          "Hoodies",
-          "Jackets"
+        "T-Shirts": [
+          { name: "Graphic Tees", link: "/men/t-shirts/graphic-tees" },
+          { name: "Plain T-Shirts", link: "/men/t-shirts/plain" },
+          { name: "Polo T-Shirts", link: "/men/t-shirts/polo" },
+          { name: "Long Sleeve T-Shirts", link: "/men/t-shirts/long-sleeve" },
         ],
-        "Bottoms": [
-          "Pants",
-          "Jeans",
-          "Shorts",
-          "Joggers",
-          "Cargo Pants"
+        Hoodies: [
+          { name: "Pullover Hoodies", link: "/men/hoodies/pullover" },
+          { name: "Zip-Up Hoodies", link: "/men/hoodies/zip-up" },
+          { name: "Sleeveless Hoodies", link: "/men/hoodies/sleeveless" },
         ],
-        "Accessories": [
-          "Bags",
-          "Hats",
-          "Belts",
-          "Sunglasses",
-          "Watches"
-        ]
-      }
+        Sweatshirts: [
+          { name: "Crew Neck Sweatshirts", link: "/men/sweatshirts/crew-neck" },
+          { name: "Graphic Sweatshirts", link: "/men/sweatshirts/graphic" },
+          { name: "Lightweight Sweatshirts", link: "/men/sweatshirts/lightweight" },
+        ],
+        "Sports T-Shirts": [
+          { name: "Performance Tees", link: "/men/sports-t-shirts/performance" },
+          { name: "Moisture-Wicking T-Shirts", link: "/men/sports-t-shirts/moisture-wicking" },
+          { name: "Running T-Shirts", link: "/men/sports-t-shirts/running" },
+        ],
+        Customization: [
+          { name: "Custom T-Shirts", link: "/men/custom/t-shirts" },
+          { name: "Custom Hoodies", link: "/men/custom/hoodies" },
+          { name: "Custom Sweatshirts", link: "/men/custom/sweatshirts" },
+          { name: "Design Your Own", link: "/men/custom/design-your-own" },
+        ],
+      },
     },
     Women: {
-      featuredImage: cloth_2,
+      featuredImage: "/placeholder.svg?height=400&width=300",
       featuredText: "Women's Latest Trends",
       categories: {
-        "All Clothing": [
-          "T-Shirts",
-          "Hoodies",
-          "Sweatshirt",
-          "Sports T-Shirts",
-          "Jackets",
-          "Shorts",
-          "Joggers"
+        "All Products": [
+          { name: "T-Shirts", link: "/women/t-shirts" },
+          { name: "Hoodies", link: "/women/hoodies" },
+          { name: "Sweatshirts", link: "/women/sweatshirts" },
+          { name: "Sports T-Shirts", link: "/women/sports-t-shirts" },
         ],
-        "Tops": [
-          "T-Shirts",
-          "Sweatshirts",
-          "Sports T-Shirts",
-          "Hoodies",
-          "Jackets"
+        "T-Shirts": [
+          { name: "Graphic Tees", link: "/women/t-shirts/graphic-tees" },
+          { name: "Crop Tops", link: "/women/t-shirts/crop-tops" },
+          { name: "V-Neck T-Shirts", link: "/women/t-shirts/v-neck" },
+          { name: "Oversized T-Shirts", link: "/women/t-shirts/oversized" },
         ],
-        "Bottoms": [  
-          "Shorts",
-          "Joggers"
+        Hoodies: [
+          { name: "Pullover Hoodies", link: "/women/hoodies/pullover" },
+          { name: "Cropped Hoodies", link: "/women/hoodies/cropped" },
+          { name: "Zip-Up Hoodies", link: "/women/hoodies/zip-up" },
         ],
-        "Best Sellers": [
-          "T-Shirts",
-          "Hoodies",
-          "Jackets",
-          "Joggers"
-        ]
-      }
-    }
+        Sweatshirts: [
+          { name: "Crew Neck Sweatshirts", link: "/women/sweatshirts/crew-neck" },
+          { name: "Graphic Sweatshirts", link: "/women/sweatshirts/graphic" },
+          { name: "Oversized Sweatshirts", link: "/women/sweatshirts/oversized" },
+        ],
+        "Sports T-Shirts": [
+          { name: "Performance Tees", link: "/women/sports-t-shirts/performance" },
+          { name: "Yoga Tops", link: "/women/sports-t-shirts/yoga-tops" },
+          { name: "Running T-Shirts", link: "/women/sports-t-shirts/running" },
+        ],
+        Customization: [
+          { name: "Custom T-Shirts", link: "/women/custom/t-shirts" },
+          { name: "Custom Hoodies", link: "/women/custom/hoodies" },
+          { name: "Custom Sweatshirts", link: "/women/custom/sweatshirts" },
+          { name: "Design Your Own", link: "/women/custom/design-your-own" },
+        ],
+      },
+    },
   }
 
   useEffect(() => {
@@ -108,19 +120,19 @@ export default function Navbar() {
 
   const toggleMenu = (menu) => {
     setActiveMenu(activeMenu === menu ? null : menu)
-    setActiveCategory("All Clothing") // Reset to default category when menu changes
+    setActiveCategory("All Products") // Reset to default category when menu changes
   }
 
   const handleMouseEnter = (menu) => {
     setActiveMenu(menu)
     if (!activeCategory) {
-      setActiveCategory("All Clothing")
+      setActiveCategory("All Products")
     }
   }
 
   const handleNavClick = () => {
     setActiveMenu(null)
-    setActiveCategory("All Clothing")
+    setActiveCategory("All Products")
   }
 
   return (
@@ -142,11 +154,13 @@ export default function Navbar() {
                 onClick={() => setIsCountryMenuOpen(!isCountryMenuOpen)}
                 className="flex items-center space-x-1 text-sm hover:text-gray-300"
               >
-                <span>{selectedCountry.name} ({selectedCountry.currency})</span>
+                <span>
+                  {selectedCountry.name} ({selectedCountry.currency})
+                </span>
                 <ChevronDown className="w-4 h-4" />
               </button>
               {isCountryMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md overflow-hidden">
+                <div className="absolute right-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md overflow-hidden z-50">
                   {countries.map((country) => (
                     <button
                       key={country.name}
@@ -167,9 +181,11 @@ export default function Navbar() {
 
         {/* Main Navigation */}
         <div className="flex items-center justify-between h-20 px-4 md:px-6">
-          <a href="/">
-            <img src={logo || "/placeholder.svg"} className="h-12 w-12" alt="Logo" />
-          </a>
+          <Link href="/">
+            <div className="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+              <img src={logo || "/placeholder.svg"} alt="Logo" width={48} height={48} />
+            </div>
+          </Link>
 
           <div className="hidden md:flex space-x-8">
             {Object.keys(menuData).map((item) => (
@@ -182,28 +198,42 @@ export default function Navbar() {
                 <ChevronDown className="w-4 h-4" />
               </button>
             ))}
-            <a 
-              href="/about" 
+            <Link
+              href="/customization"
+              className="hover:text-gray-600"
+              onClick={handleNavClick}
+              onMouseEnter={() => setActiveMenu(null)}
+            >
+              Customization
+            </Link>
+            <Link
+              href="/about"
               className="hover:text-gray-600"
               onClick={handleNavClick}
               onMouseEnter={() => setActiveMenu(null)}
             >
               About Us
-            </a>
-            <a 
-              href="#" 
+            </Link>
+            <Link
+              href="/sale"
               className="text-red-500 hover:text-red-600"
               onClick={handleNavClick}
               onMouseEnter={() => setActiveMenu(null)}
             >
               Sale
-            </a>
+            </Link>
           </div>
 
           <div className="hidden md:flex items-center space-x-6">
-            <Search className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-            <a href="/login"><User className="w-5 h-5 cursor-pointer hover:text-gray-600" /></a>
-            <ShoppingBag className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+            <Link href="/search">
+              <Search className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+            </Link>
+            <Link href="/login">
+              <User className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+            </Link>
+            <Link  onClick={() => setIsCartOpen(true)}>
+              <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+            </Link>
           </div>
 
           <div className="md:hidden">
@@ -219,7 +249,7 @@ export default function Navbar() {
             className="hidden md:block absolute left-0 right-0 bg-white shadow-lg border-t"
             onMouseLeave={() => {
               setActiveMenu(null)
-              setActiveCategory("All Clothing")
+              setActiveCategory("All Products")
             }}
           >
             <div className="w-full px-4 md:px-6 py-8">
@@ -230,7 +260,7 @@ export default function Navbar() {
                     <div
                       key={category}
                       className={`flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-50 ${
-                        activeCategory === category ? 'bg-gray-50' : ''
+                        activeCategory === category ? "bg-gray-50" : ""
                       }`}
                       onMouseEnter={() => setActiveCategory(category)}
                     >
@@ -245,14 +275,15 @@ export default function Navbar() {
                   <div className="px-4">
                     <h3 className="font-semibold mb-4">{activeCategory}</h3>
                     <div className="grid grid-cols-2 gap-4">
-                      {menuData[activeMenu].categories[activeCategory].map((item) => (
-                        <a
-                          key={item}
-                          href="#"
+                      {menuData[activeMenu].categories[activeCategory]?.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.link}
                           className="text-gray-600 hover:text-gray-900"
+                          onClick={handleNavClick}
                         >
-                          {item}
-                        </a>
+                          {item.name}
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -282,9 +313,11 @@ export default function Navbar() {
         <div className="fixed inset-0 bg-white z-40 md:hidden overflow-y-auto">
           <div className="p-4 md:p-6">
             <div className="flex justify-between items-center mb-6">
-              <a href="/">
-                <img src={logo || "/placeholder.svg"} className="h-8 w-8" alt="Logo" />
-              </a>
+              <Link href="/">
+                <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                  <img src={logo || "/placeholder.svg"} alt="Logo" width={32} height={32} />
+                </div>
+              </Link>
               <button onClick={toggleMobileMenu} className="focus:outline-none">
                 <X className="w-6 h-6" />
               </button>
@@ -293,15 +326,10 @@ export default function Navbar() {
             <div className="space-y-2">
               {Object.entries(menuData).map(([menu, data]) => (
                 <div key={menu} className="border-b border-gray-100">
-                  <button
-                    className="flex items-center justify-between w-full py-3"
-                    onClick={() => toggleMenu(menu)}
-                  >
+                  <button className="flex items-center justify-between w-full py-3" onClick={() => toggleMenu(menu)}>
                     <span className="text-lg font-medium">{menu}</span>
                     <ChevronDown
-                      className={`w-5 h-5 transition-transform ${
-                        activeMenu === menu ? "rotate-180" : ""
-                      }`}
+                      className={`w-5 h-5 transition-transform ${activeMenu === menu ? "rotate-180" : ""}`}
                     />
                   </button>
 
@@ -309,15 +337,17 @@ export default function Navbar() {
                     <div className="pb-4 pl-4">
                       {Object.entries(data.categories).map(([category, items]) => (
                         <div key={category} className="mb-4">
-                          <h3 className="text-sm font-semibold text-gray-400 mb-2">
-                            {category}
-                          </h3>
+                          <h3 className="text-sm font-semibold text-gray-400 mb-2">{category}</h3>
                           <ul className="space-y-2">
                             {items.map((item) => (
-                              <li key={item}>
-                                <a href="#" className="text-gray-600 text-sm block py-1">
-                                  {item}
-                                </a>
+                              <li key={item.name}>
+                                <Link
+                                  href={item.link}
+                                  className="text-gray-600 text-sm block py-1"
+                                  onClick={toggleMobileMenu}
+                                >
+                                  {item.name}
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -327,27 +357,30 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-              <a href="/about" className="block py-3 text-lg font-medium">
+              <Link href="/customization" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
+                Customization
+              </Link>
+              <Link href="/about" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
                 About Us
-              </a>
-              <a href="#" className="block py-3 text-lg font-medium text-red-500">
+              </Link>
+              <Link href="/sale" className="block py-3 text-lg font-medium text-red-500" onClick={toggleMobileMenu}>
                 Sale
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center justify-around mt-8 pt-4 border-t border-gray-100">
-              <div className="flex flex-col items-center">
+              <Link href="/search" className="flex flex-col items-center" onClick={toggleMobileMenu}>
                 <Search className="w-6 h-6 mb-1" />
                 <span className="text-xs">Search</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <a href="/login"><User className="w-6 h-6 mb-1" /></a>
+              </Link>
+              <Link href="/login" className="flex flex-col items-center" onClick={toggleMobileMenu}>
+                <User className="w-6 h-6 mb-1" />
                 <span className="text-xs">Account</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <ShoppingBag className="w-6 h-6 mb-1" />
+              </Link>
+              <Link onClick={() => setIsCartOpen(true)} className="flex flex-col items-center" >
+                <ShoppingCart className="w-6 h-6 mb-1" />
                 <span className="text-xs">Cart</span>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -355,3 +388,4 @@ export default function Navbar() {
     </nav>
   )
 }
+
