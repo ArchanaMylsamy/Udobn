@@ -11,6 +11,7 @@ import Terms_Conditions from './pages/Terms&Conditions/terms'
 import Footer from './components/footer';
 import MensCollection from './pages/Men/men';
 import ProductPage from './pages/Single/single';
+import TShirtCustomizer from './pages/Customizer/customizer';
 function App() {
   return (
     <div className="App">
@@ -26,6 +27,7 @@ function App() {
         <Route path="/men/clothing" element={<MensCollection/>}/>
         <Route path="product" element={<ProductPage/>}/>
         <Route path="/terms" element={<Terms_Conditions/>}/>
+        <Route path="/customizer" element={<TShirtCustomizer/>}/>
       </Routes>
       </BrowserRouter>
      <Footer/>

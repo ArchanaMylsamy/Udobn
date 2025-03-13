@@ -1,11 +1,11 @@
-"use client"
-
+import { Shirt } from "lucide-react";
 import { useState, useEffect } from "react"
 import { ShoppingBag, Search, Menu, X, ChevronDown, User, Instagram, ChevronRight } from "lucide-react"
 import cloth_1 from "../assets/cloth-1.jpg"
 import cloth_2 from "../assets/cloth-2.jpg"
 import logo from "../assets/udobn_logo.png"
 import { Link } from "react-router-dom"
+import customize_image from '../assets/color-selection.png'
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -191,13 +191,13 @@ export default function Navbar() {
               About Us
             </a>
             <a 
-              href="#" 
-              className="text-red-500 hover:text-red-600"
-              onClick={handleNavClick}
-              onMouseEnter={() => setActiveMenu(null)}
-            >
-              Sale
-            </a>
+  href="/customizer" 
+  className="text-black-500 hover:text-gray-600 flex items-center gap-1"
+  onClick={handleNavClick}
+  onMouseEnter={() => setActiveMenu(null)}
+>
+  Customize <Shirt className="w-5 h-5" />
+</a>
           </div>
 
           <div className="hidden md:flex items-center space-x-6">
