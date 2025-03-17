@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from "framer-motion";
-import { Truck, MapPin, Tag } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Truck, MapPin, Tag } from 'lucide-react';
 
 const FeatureCard = ({ icon: Icon, text }) => (
   <motion.div
@@ -20,9 +20,27 @@ const FeatureCard = ({ icon: Icon, text }) => (
 const PasswordResetForm = ({ onCancel }) => {
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle password reset logic here
+    try {
+      const response = await fetch('/api/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      alert('Password reset failed. Please try again.');
+    }
   };
 
   return (
@@ -73,9 +91,30 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [showPasswordReset, setShowPasswordReset] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
+    try {
+      const response = await fetch('http://localhost:5000/api/customers/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+        // Store the token securely (e.g., in a cookie or local storage)
+        localStorage.setItem('token', result.token);
+        // Redirect to a protected page or update the UI
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('Login failed. Please try again.');
+    }
   };
 
   if (showPasswordReset) {

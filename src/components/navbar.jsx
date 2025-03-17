@@ -145,7 +145,7 @@ export default function Navbar() {
         {/* Welcome Banner */}
         <div className="bg-black text-white">
           <div className="max-w-screen-2xl mx-auto px-4 py-2 flex justify-between items-center">
-            <a href="https://instagram.com" className="hover:text-gray-300">
+            <a to="https://instagram.com" className="hover:text-gray-300">
               <Instagram className="w-5 h-5" />
             </a>
             <span className="text-sm hidden sm:block">Welcome to One Nice Shop!</span>
@@ -181,7 +181,7 @@ export default function Navbar() {
 
         {/* Main Navigation */}
         <div className="flex items-center justify-between h-20 px-4 md:px-6">
-          <Link href="/">
+          <Link to="/">
             <div className="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
               <img src={logo || "/placeholder.svg"} alt="Logo" width={48} height={48} />
             </div>
@@ -199,7 +199,7 @@ export default function Navbar() {
               </button>
             ))}
             <Link
-              href="/customization"
+              to="/customization"
               className="hover:text-gray-600"
               onClick={handleNavClick}
               onMouseEnter={() => setActiveMenu(null)}
@@ -207,7 +207,7 @@ export default function Navbar() {
               Customization
             </Link>
             <Link
-              href="/about"
+              to="/about"
               className="hover:text-gray-600"
               onClick={handleNavClick}
               onMouseEnter={() => setActiveMenu(null)}
@@ -215,7 +215,7 @@ export default function Navbar() {
               About Us
             </Link>
             <Link
-              href="/sale"
+              to="/sale"
               className="text-red-500 hover:text-red-600"
               onClick={handleNavClick}
               onMouseEnter={() => setActiveMenu(null)}
@@ -225,10 +225,10 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/search">
+            <Link to="/search">
               <Search className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             </Link>
-            <Link href="/login">
+            <Link to="/login">
               <User className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             </Link>
             <Link  onClick={() => setIsCartOpen(true)}>
@@ -278,7 +278,7 @@ export default function Navbar() {
                       {menuData[activeMenu].categories[activeCategory]?.map((item) => (
                         <Link
                           key={item.name}
-                          href={item.link}
+                          to={item.link}
                           className="text-gray-600 hover:text-gray-900"
                           onClick={handleNavClick}
                         >
@@ -313,9 +313,9 @@ export default function Navbar() {
         <div className="fixed inset-0 bg-white z-40 md:hidden overflow-y-auto">
           <div className="p-4 md:p-6">
             <div className="flex justify-between items-center mb-6">
-              <Link href="/">
+              <Link to="/">
                 <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
-                  <img src={logo || "/placeholder.svg"} alt="Logo" width={32} height={32} />
+                  <img src={logo} alt="Logo" width={32} height={32} />
                 </div>
               </Link>
               <button onClick={toggleMobileMenu} className="focus:outline-none">
@@ -342,7 +342,7 @@ export default function Navbar() {
                             {items.map((item) => (
                               <li key={item.name}>
                                 <Link
-                                  href={item.link}
+                                  to={item.link}
                                   className="text-gray-600 text-sm block py-1"
                                   onClick={toggleMobileMenu}
                                 >
@@ -357,23 +357,23 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-              <Link href="/customization" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
+              <Link to="/customization" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
                 Customization
               </Link>
-              <Link href="/about" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
+              <Link to="/about" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
                 About Us
               </Link>
-              <Link href="/sale" className="block py-3 text-lg font-medium text-red-500" onClick={toggleMobileMenu}>
+              <Link to="/sale" className="block py-3 text-lg font-medium text-red-500" onClick={toggleMobileMenu}>
                 Sale
               </Link>
             </div>
 
             <div className="flex items-center justify-around mt-8 pt-4 border-t border-gray-100">
-              <Link href="/search" className="flex flex-col items-center" onClick={toggleMobileMenu}>
+              <Link to="/search" className="flex flex-col items-center" onClick={toggleMobileMenu}>
                 <Search className="w-6 h-6 mb-1" />
                 <span className="text-xs">Search</span>
               </Link>
-              <Link href="/login" className="flex flex-col items-center" onClick={toggleMobileMenu}>
+              <Link to="/login" className="flex flex-col items-center" onClick={toggleMobileMenu}>
                 <User className="w-6 h-6 mb-1" />
                 <span className="text-xs">Account</span>
               </Link>

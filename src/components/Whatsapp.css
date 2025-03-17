@@ -1,0 +1,30 @@
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+  }
+  
+  /* Hover effect */
+  .whatsapp-float:hover {
+    transform: scale(1.1);
+    background-color: #128c7e;
+  }
+  
+  /* Ensure the Flaticon SVG is centered and sized properly */
+  .whatsapp-icon {
+    width: 35px;
+    height: 35px;
+  }
+  

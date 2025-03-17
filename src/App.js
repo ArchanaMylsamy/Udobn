@@ -13,11 +13,15 @@ import Footer from './components/footer';
 import MensCollection from './pages/Men/men';
 import ProductPage from './pages/Single/single';
 import Cart from './components/Cart';
+import CheckoutPage from './pages/Checkout/checkout';
+import WhatsAppIcon from "./components/Whatsapp";
+
 function App() {
   return (
     
     <div className="App">
      <CartProvider> 
+      <WhatsAppIcon/>
     <BrowserRouter>
     <Navbar/>
       <Routes>
@@ -29,6 +33,7 @@ function App() {
         <Route path="/register" element={<RegistrationForm/>}/>
         <Route path="/men/clothing" element={<MensCollection/>}/>
         <Route path="product" element={<ProductPage/>}/>
+        <Route path="/checkout" element={<CheckoutPage/>}/>
         <Route path="/terms" element={<Terms_Conditions/>}/>
       </Routes>
       </BrowserRouter>
