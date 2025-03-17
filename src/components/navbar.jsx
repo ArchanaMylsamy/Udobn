@@ -57,12 +57,7 @@ export default function Navbar() {
           { name: "Moisture-Wicking T-Shirts", link: "/men/sports-t-shirts/moisture-wicking" },
           { name: "Running T-Shirts", link: "/men/sports-t-shirts/running" },
         ],
-        Customization: [
-          { name: "Custom T-Shirts", link: "/men/custom/t-shirts" },
-          { name: "Custom Hoodies", link: "/men/custom/hoodies" },
-          { name: "Custom Sweatshirts", link: "/men/custom/sweatshirts" },
-          { name: "Design Your Own", link: "/men/custom/design-your-own" },
-        ],
+       
       },
     },
     Women: {
@@ -96,12 +91,7 @@ export default function Navbar() {
           { name: "Yoga Tops", link: "/women/sports-t-shirts/yoga-tops" },
           { name: "Running T-Shirts", link: "/women/sports-t-shirts/running" },
         ],
-        Customization: [
-          { name: "Custom T-Shirts", link: "/women/custom/t-shirts" },
-          { name: "Custom Hoodies", link: "/women/custom/hoodies" },
-          { name: "Custom Sweatshirts", link: "/women/custom/sweatshirts" },
-          { name: "Design Your Own", link: "/women/custom/design-your-own" },
-        ],
+      
       },
     },
   }
@@ -200,14 +190,7 @@ export default function Navbar() {
               </button>
             ))}
 
-            <Link
-              to="/customization"
-              className="hover:text-gray-600"
-              onClick={handleNavClick}
-              onMouseEnter={() => setActiveMenu(null)}
-            >
-              Customization
-            </Link>
+           
             <Link
               to="/about"
               className="hover:text-gray-600"
@@ -217,21 +200,14 @@ export default function Navbar() {
               About Us
             </Link>
             <a 
-  href="/customizer" 
-  className="text-black-500 hover:text-gray-600 flex items-center gap-1"
-  onClick={handleNavClick}
-  onMouseEnter={() => setActiveMenu(null)}
->
-  Customize <Shirt className="w-5 h-5" />
-</a>
-            <Link
-              to="/sale"
-              className="text-red-500 hover:text-red-600"
+              href="/customizer" 
+              className="text-black-500 hover:text-gray-600 flex items-center gap-1"
               onClick={handleNavClick}
               onMouseEnter={() => setActiveMenu(null)}
             >
-              Sale
-            </Link>
+              Customize <Shirt className="w-5 h-5" />
+            </a>
+          
             
             
           </div>
@@ -369,15 +345,11 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-              <Link to="/customization" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
-                Customization
-              </Link>
+              
               <Link to="/about" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
                 About Us
               </Link>
-              <Link to="/sale" className="block py-3 text-lg font-medium text-red-500" onClick={toggleMobileMenu}>
-                Sale
-              </Link>
+              
             </div>
 
             <div className="flex items-center justify-around mt-8 pt-4 border-t border-gray-100">

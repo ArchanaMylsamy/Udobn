@@ -19,9 +19,17 @@ export default function SimpleCart() {
   if (!isCartOpen) return null;
   
   const handleCheckout = () => {
-    setIsCartOpen(false);
-    navigate('/checkout');
+    const token = sessionStorage.getItem('token');
+  
+    if (!token) {
+      alert('Please log in to proceed to checkout!');
+      navigate('/login');
+    } else {
+      setIsCartOpen(false);
+      navigate('/checkout');
+    }
   };
+  
   
   return (
     <div className="simple-cart-overlay">

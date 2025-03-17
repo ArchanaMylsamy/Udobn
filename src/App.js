@@ -1,5 +1,7 @@
 
 import './App.css';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from './components/navbar';
 import { BrowserRouter,Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Home/home'
@@ -16,15 +18,17 @@ import Cart from './components/Cart';
 import TShirtCustomizer from './pages/Customizer/customizer';
 import CheckoutPage from './pages/Checkout/checkout';
 import WhatsAppIcon from "./components/Whatsapp";
+import LastVisitedTracker from './components/LastVisitedTracker';
 
 function App() {
+  
   return (
-    
     <div className="App">
-     <CartProvider> 
+      <CartProvider> 
       <WhatsAppIcon/>
-    <BrowserRouter>
-    <Navbar/>
+      <BrowserRouter>
+      <LastVisitedTracker/>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/about" element={<About/>}/>
@@ -39,8 +43,8 @@ function App() {
         <Route path="/customizer" element={<TShirtCustomizer/>}/>
       </Routes>
       </BrowserRouter>
-     <Footer/>
-     </CartProvider>
+      <Footer/>
+      </CartProvider>
     </div>
   );
 }

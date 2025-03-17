@@ -386,22 +386,6 @@ export default function CheckoutPage() {
               )}
             </div>
             
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <input 
-                  type="radio" 
-                  id="creditCard" 
-                  name="payment" 
-                  value="card" 
-                  checked={paymentMethod === "card"} 
-                  onChange={() => setPaymentMethod("card")}
-                  className="mr-2" 
-                />
-                <label htmlFor="creditCard" className="flex items-center">
-                  Credit Card/Debit Card/NetBanking
-                </label>
-              </div>
-            </div>
             
             <div className="mb-6">
               <div className="flex items-center mb-2">

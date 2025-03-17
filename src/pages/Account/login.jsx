@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Truck, MapPin, Tag } from 'lucide-react';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 const FeatureCard = ({ icon: Icon, text }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,12 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPasswordReset, setShowPasswordReset] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -106,8 +111,10 @@ const LoginForm = () => {
       if (response.ok) {
         alert(result.message);
         // Store the token securely (e.g., in a cookie or local storage)
-        localStorage.setItem('token', result.token);
-        // Redirect to a protected page or update the UI
+        sessionStorage.setItem('token', result.token);
+        // Redirect to the previous page or a default one
+        const from = localStorage.getItem('lastVisited') || '/';
+        navigate(from, { replace: true });
       } else {
         alert(result.message);
       }

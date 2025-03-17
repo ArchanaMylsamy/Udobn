@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Truck, MapPin, Tag } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const FeatureCard = ({ icon: Icon, text }) => (
   <motion.div
@@ -18,6 +19,7 @@ const FeatureCard = ({ icon: Icon, text }) => (
 );
 
 const RegistrationForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -47,7 +49,7 @@ const RegistrationForm = () => {
       const result = await response.json();
       if (response.ok) {
         alert(result.message);
-        // Redirect to login page or another page
+        navigate('/login')
       } else {
         alert(result.message);
       }
