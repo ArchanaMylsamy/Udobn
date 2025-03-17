@@ -13,6 +13,7 @@ import Footer from './components/footer';
 import MensCollection from './pages/Men/men';
 import ProductPage from './pages/Single/single';
 import Cart from './components/Cart';
+import TShirtCustomizer from './pages/Customizer/customizer';
 import CheckoutPage from './pages/Checkout/checkout';
 import WhatsAppIcon from "./components/Whatsapp";
 
@@ -35,6 +36,7 @@ function App() {
         <Route path="product" element={<ProductPage/>}/>
         <Route path="/checkout" element={<CheckoutPage/>}/>
         <Route path="/terms" element={<Terms_Conditions/>}/>
+        <Route path="/customizer" element={<TShirtCustomizer/>}/>
       </Routes>
       </BrowserRouter>
      <Footer/>

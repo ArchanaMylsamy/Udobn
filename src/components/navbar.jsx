@@ -1,11 +1,12 @@
-"use client"
-
+import { Shirt } from "lucide-react";
 import { useState, useEffect } from "react"
 import { ShoppingCart, Search, Menu, X, ChevronDown, User, Instagram, ChevronRight } from "lucide-react"
 import { useCart } from '../context/CartContext';
 import {Link} from "react-router-dom"
 
 import logo from "../assets/udobn_logo.png"
+
+import customize_image from '../assets/color-selection.png'
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -186,7 +187,7 @@ export default function Navbar() {
               <img src={logo || "/placeholder.svg"} alt="Logo" width={48} height={48} />
             </div>
           </Link>
-
+ 
           <div className="hidden md:flex space-x-8">
             {Object.keys(menuData).map((item) => (
               <button
@@ -198,6 +199,7 @@ export default function Navbar() {
                 <ChevronDown className="w-4 h-4" />
               </button>
             ))}
+
             <Link
               to="/customization"
               className="hover:text-gray-600"
@@ -214,6 +216,14 @@ export default function Navbar() {
             >
               About Us
             </Link>
+            <a 
+  href="/customizer" 
+  className="text-black-500 hover:text-gray-600 flex items-center gap-1"
+  onClick={handleNavClick}
+  onMouseEnter={() => setActiveMenu(null)}
+>
+  Customize <Shirt className="w-5 h-5" />
+</a>
             <Link
               to="/sale"
               className="text-red-500 hover:text-red-600"
@@ -222,6 +232,8 @@ export default function Navbar() {
             >
               Sale
             </Link>
+            
+            
           </div>
 
           <div className="hidden md:flex items-center space-x-6">
