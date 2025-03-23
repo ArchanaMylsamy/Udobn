@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AOS from "aos";
+import { useNavigate } from "react-router-dom";
 import "aos/dist/aos.css";
 import "./menstyle.css";
 import SimpleCart from "../../components/Cart";
@@ -9,6 +10,7 @@ import axios from "axios";
 import ProductImageCarousel from "../../components/ProductImageCarousel"; // Import the new component
 
 export default function MensCollection() {
+  const navigate = useNavigate();
   const { addToCart, cartItemsCount, setIsCartOpen, currency } = useCart();
   
   const [products, setProducts] = useState([]);
@@ -112,6 +114,10 @@ export default function MensCollection() {
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
   };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
   
   const parseSizes = (product) => {
     if (!product.sizes) return [];
@@ -199,7 +205,10 @@ export default function MensCollection() {
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <div key={product._id} className="product-card">
-              <div className="product-image">
+              <div 
+              className="product-image cursor-pointer" 
+              onClick={() => handleProductClick(product._id)}
+              >
                 {/* Replace the single image with the carousel component */}
                 <ProductImageCarousel 
                   images={product.images} 

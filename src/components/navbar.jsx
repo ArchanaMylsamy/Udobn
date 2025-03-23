@@ -216,15 +216,22 @@ export default function Navbar() {
             >
               About Us
             </Link>
-            <a 
-              href="/customizer" 
+            <Link
+              to="/contact"
+              className="hover:text-gray-600"
+              onClick={handleNavClick}
+              onMouseEnter={() => setActiveMenu(null)}
+            >
+              Contact
+            </Link>
+            <Link 
+              to="/customizer" 
               className="text-black-500 hover:text-gray-600 flex items-center gap-1"
               onClick={handleNavClick}
               onMouseEnter={() => setActiveMenu(null)}
             >
               Customize <Shirt className="w-5 h-5" />
-            </a>
-          
+            </Link>
             
             
           </div>
@@ -365,6 +372,12 @@ export default function Navbar() {
               
               <Link to="/about" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
                 About Us
+              </Link>
+              <Link to="/contact" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
+                Contact
+              </Link>
+              <Link to="/customizer" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
+              Customize <Shirt className="w-5 h-5" />
               </Link>
               
             </div>

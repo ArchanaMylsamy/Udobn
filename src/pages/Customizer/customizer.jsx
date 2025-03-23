@@ -721,44 +721,86 @@ const showCustomAlert = (message, options = {}) => {
             }
           }, 300);
         } else {
-          // All sides processed, show confirmation
+          // All sides processed, show loading indicator
           document.body.removeChild(modal);
           
-          // Build HTML for thumbnails
-          let thumbnailsHTML = '<div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">';
-          
-          exportImages.forEach(img => {
-            thumbnailsHTML += `
-              <div style="text-align: center; margin: 5px;">
-                <img src="${img.dataURL}" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 4px;">
-                <p style="margin: 5px 0 0 0; font-weight: bold;">${img.side === 'front' ? 'Front' : 'Back'}</p>
-              </div>
-            `;
+          // Show loading indicator
+          const loadingPopup = showCustomAlert('Sending your design request...', {
+            title: 'Processing',
+            type: 'info',
+            showCloseButton: false
           });
           
-          thumbnailsHTML += '</div>';
-          thumbnailsHTML += `<p style="margin-top: 15px;">Your design request has been sent to ${emailInput.value}. We'll get back to you soon.</p>`;
+          // Format the data for the API request
+          const designsForAPI = exportImages.map(img => ({
+            side: img.side,
+            image: img.dataURL
+          }));
           
-          // Use the custom alert with HTML
-          const confirmPopup = showCustomAlert(thumbnailsHTML, {
-            title: 'Design Request Submitted!',
-            type: 'success',
-            confirmText: 'Close',
-            isHTML: true, // Important: set this to true for HTML content
-            onConfirm: () => {
-              // For demonstration: offer direct download of images
-              exportImages.forEach(img => {
-                const link = document.createElement('a');
-                link.download = `custom-tshirt-${img.side}.png`;
-                link.href = img.dataURL;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-              });
+          // Send data to backend using fetch
+          fetch('http://localhost:5000/api/email/send-design', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: emailInput.value,
+              message: queryInput.value,
+              designs: designsForAPI
+            })
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
             }
+            return response.json();
+          })
+          .then(data => {
+            // Close loading indicator
+            if (loadingPopup && loadingPopup.close) {
+              loadingPopup.close();
+            }
+            
+            // Build HTML for thumbnails
+            let thumbnailsHTML = '<div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">';
+            
+            exportImages.forEach(img => {
+              thumbnailsHTML += `
+                <div style="text-align: center; margin: 5px;">
+                  <img src="${img.dataURL}" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 4px;">
+                  <p style="margin: 5px 0 0 0; font-weight: bold;">${img.side === 'front' ? 'Front' : 'Back'}</p>
+                </div>
+              `;
+            });
+            
+            thumbnailsHTML += '</div>';
+            thumbnailsHTML += `<p style="margin-top: 15px;">Your design request has been sent to udobn.official@gmail.com . We'll get back to you soon.</p>`;
+            
+            // Show success message
+            showCustomAlert(thumbnailsHTML, {
+              title: 'Design Request Submitted!',
+              type: 'success',
+              confirmText: 'Close',
+              isHTML: true
+            });
+          })
+          .catch(error => {
+            // Close loading indicator
+            if (loadingPopup && loadingPopup.close) {
+              loadingPopup.close();
+            }
+            
+            console.error('Error submitting design:', error);
+            
+            // Show error message
+            showCustomAlert('There was a problem sending your design request. Please try again later.', {
+              title: 'Submission Error',
+              type: 'error'
+            });
           });
         }
       };
+      
       // Start processing
       processNextSide();
     };

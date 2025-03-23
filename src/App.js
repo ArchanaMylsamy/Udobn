@@ -23,7 +23,7 @@ import {CurrencyProvider} from './context/CurrencyContext'
 import OrderSuccessPage from './pages/Order/sucess';
 import OrderList from './pages/Order/orders'
 import SimpleCart from './components/Cart';
-
+import ProductDetail from './pages/Product/ProductDetail';
 function App() {
   
   return (
@@ -46,6 +46,7 @@ function App() {
         <Route path="/register" element={<RegistrationForm/>}/>
         <Route path="/men/clothing" element={<MensCollection/>}/>
         <Route path="/women/clothing" element={< WomensCollection/>}/>
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/checkout" element={<CheckoutPage/>}/>
         <Route path="/terms" element={<Terms_Conditions/>}/>
         <Route path="/customizer" element={<TShirtCustomizer/>}/>

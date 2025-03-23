@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
 import contact from '../../assets/contact.webp';
 import { Truck, MapPin, Tag } from "lucide-react"
 const FeatureCard = ({ icon: Icon, text }) => (
@@ -16,9 +18,22 @@ const FeatureCard = ({ icon: Icon, text }) => (
     </motion.div>
   )
 export default function ContactPage() {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("");
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
+    setStatus("Sending...");
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/email/send-email", formData);
+      setStatus(response.data.message);
+    } catch (error) {
+      setStatus("Failed to send email.");
+      console.error(error);
+    }
   };
 
   return (
@@ -83,6 +98,8 @@ export default function ContactPage() {
                   <input
                     id="name"
                     name="name"
+                    onChange={handleChange}
+                    placeholder="Name"
                     required
                     className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200"
                   />
@@ -95,6 +112,8 @@ export default function ContactPage() {
                     id="email"
                     name="email"
                     type="email"
+                    onChange={handleChange} 
+                    placeholder="Email"
                     required
                     className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200"
                   />
@@ -108,6 +127,8 @@ export default function ContactPage() {
                 <textarea
                   id="message"
                   name="message"
+                  onChange={handleChange} 
+                  placeholder="Message"
                   required
                   rows={6}
                   className="w-full p-2 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
@@ -120,6 +141,7 @@ export default function ContactPage() {
               >
                 Send
               </button>
+              {status && <p>{status}</p>}
             </form>
           </motion.div>
         </div>
