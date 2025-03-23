@@ -81,7 +81,7 @@ const RegistrationForm = () => {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -97,7 +97,7 @@ const RegistrationForm = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -113,7 +113,7 @@ const RegistrationForm = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -129,7 +129,7 @@ const RegistrationForm = () => {
               required
               value={formData.address}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -145,7 +145,7 @@ const RegistrationForm = () => {
               required
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -153,7 +153,7 @@ const RegistrationForm = () => {
           <div className="pt-2">
             <button
               type="submit"
-              className="w-auto bg-gray-900 text-white px-8 py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="w-auto bg-gray-900 text-white px-8 py-2  hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
               Create account
             </button>

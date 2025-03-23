@@ -62,14 +62,14 @@ const PasswordResetForm = ({ onCancel }) => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+            className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
           />
         </div>
 
         <div className="flex items-center space-x-4">
           <button
             type="submit"
-            className="bg-gray-900 text-white px-8 py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="bg-gray-900 text-white px-8 py-2  hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
             Submit
           </button>
@@ -167,7 +167,7 @@ const LoginForm = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -184,7 +184,7 @@ const LoginForm = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
             <button
               type="button"
@@ -198,7 +198,7 @@ const LoginForm = () => {
           <div className="flex items-center justify-between pt-2">
             <button
               type="submit"
-              className="bg-gray-900 text-white px-8 py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="bg-gray-900 text-white px-8 py-2 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
               Sign in
             </button>
