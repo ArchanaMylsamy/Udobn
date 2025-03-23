@@ -6,6 +6,7 @@ import SimpleCart from "../../components/Cart";
 import { useCart } from "../../context/CartContext";
 import { useCurrency } from '../../context/CurrencyContext';
 import axios from "axios";
+import ProductImageCarousel from "../../components/ProductImageCarousel"; // Import the new component
 
 export default function MensCollection() {
   const { addToCart, cartItemsCount, setIsCartOpen, currency } = useCart();
@@ -15,8 +16,6 @@ export default function MensCollection() {
   const [sortOrder, setSortOrder] = useState("alphabetically");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const { formatPrice } = useCurrency();
-  // Store selected sizes locally in this component
-  const [selectedSizes, setSelectedSizes] = useState({});
   
   const categories = [
     { id: "all", name: "All Products" },
@@ -32,26 +31,22 @@ export default function MensCollection() {
       once: true,
     });
     
-    // Fetch products from the backend
     fetchProducts();
   }, []);
   
   useEffect(() => {
-    // Apply filters and sorting whenever products or filter criteria change
     applyFiltersAndSort();
-  }, [products, selectedCategory, sortOrder, currency]); // Add currency as a dependency
+  }, [products, selectedCategory, sortOrder, currency]);
   
   const fetchProducts = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/products/gender/Male');
-      console.log(response);
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
   
-
   const applyFiltersAndSort = () => {
     let result = [...products];
     
@@ -107,7 +102,6 @@ export default function MensCollection() {
         break;
     }
     
-    
     setFilteredProducts(result);
   };
    
@@ -119,18 +113,13 @@ export default function MensCollection() {
     setSelectedCategory(categoryId);
   };
   
-  
-  
-  // Parse sizes properly
   const parseSizes = (product) => {
     if (!product.sizes) return [];
     
-    // Parse the sizes array properly
     let parsedSizes = [];
     if (Array.isArray(product.sizes)) {
       try {
         parsedSizes = product.sizes.map(size => {
-          // Remove quotes and brackets
           return size.replace(/[\[\]"\\]/g, '');
         });
       } catch (e) {
@@ -141,17 +130,24 @@ export default function MensCollection() {
     return parsedSizes;
   };
   
-  // Handle size selection specifically for this component
+  const [selectedSizes, setSelectedSizes] = useState({});
+
   const handleSizeSelect = (productId, size) => {
-    setSelectedSizes(prev => ({
-      ...prev,
-      [productId]: size // This ensures only the selected product is updated
-    }));
-  };  
+    setSelectedSizes((prevSizes) => {
+      const currentSize = prevSizes[productId];
   
-  // Handle adding to cart with the selected size
+      if (currentSize === size) {
+        const newSizes = { ...prevSizes };
+        delete newSizes[productId];
+        return newSizes;
+      }
+  
+      return { ...prevSizes, [productId]: size };
+    });
+  };
+
   const handleAddToCart = (product) => {
-    const selectedSize = selectedSizes[product.id];
+    const selectedSize = selectedSizes[product._id];
     if (!selectedSize) {
       alert("Please select a size first");
       return;
@@ -159,10 +155,7 @@ export default function MensCollection() {
     
     addToCart({
       ...product,
-      selectedSize: selectedSize,
-      
-      
-      
+      selectedSize: selectedSize,  
     });
   };
   
@@ -170,11 +163,10 @@ export default function MensCollection() {
     <div className="mens-collection">
       <header className="hero" data-aos="fade-down">
         <div className="logo">Udobn</div>
-        <h1>Women's Collection</h1>
+        <h1>Men's Collection</h1>
       </header>
       <main>
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 py-5">
-        {/* Category Tabs (Left-Aligned) */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 py-5 ps-2">
         <div className="flex flex-wrap justify-center md:justify-start gap-2">
           {categories.map(category => (
             <button
@@ -189,8 +181,7 @@ export default function MensCollection() {
           ))}
         </div>
 
-        {/* Sort Dropdown (Right-Aligned) */}
-        <div className="flex items-center justify-center md:justify-end w-full md:w-auto">
+        <div className="flex items-center justify-center md:justify-end w-full md:w-auto pe-2">
           <label htmlFor="sort-select" className="mr-2 font-medium text-gray-700">Sort by:</label>
           <select
             id="sort-select"
@@ -207,9 +198,13 @@ export default function MensCollection() {
       <div className="products-grid">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product.id} className="product-card">
+            <div key={product._id} className="product-card">
               <div className="product-image">
-                <img src={product.images[0] || "/placeholder.svg"} alt={product.name} />
+                {/* Replace the single image with the carousel component */}
+                <ProductImageCarousel 
+                  images={product.images} 
+                  productName={product.name} 
+                />
               </div>
               <div className="product-info">
                 <span className="brand">{product.brand}</span>
@@ -218,9 +213,11 @@ export default function MensCollection() {
                 <div className="sizes">
                   {parseSizes(product).map((size) => (
                     <span
-                      key={`${product.id}-${size}`}
-                      className={`size ${selectedSizes[product.id] === size ? 'selected' : ''}`}
-                      onClick={() => handleSizeSelect(product.id, size)}
+                      key={`${product._id}-${size}`}
+                      className={`size ${selectedSizes[product._id] === size ? 'selected' : ''}`}
+                      onClick={() => {
+                        handleSizeSelect(product._id, size);
+                      }}
                     >
                       {size}
                     </span>
@@ -239,7 +236,6 @@ export default function MensCollection() {
         )}
       </div>           
       </main>
-      {/* Simple Cart Component */}
       <SimpleCart />
     </div>
   );

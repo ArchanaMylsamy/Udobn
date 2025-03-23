@@ -169,7 +169,7 @@ const OrderSuccessPage = () => {
             {/* Actions */}
             <div className="flex flex-wrap items-center justify-start gap-4">
               <Link 
-                to="/my-orders" 
+                to="/orders" 
                 className="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 View My Orders

@@ -12,13 +12,13 @@ export function CurrencyProvider({ children }) {
   
   const [currency, setCurrency] = useState(storedCurrency);
   const [country, setCountry] = useState(storedCountry);
-  const [symbol, setSymbol] = useState(currency === 'INDIA' ? '₹' : '$');
+  const [symbol, setSymbol] = useState(currency === 'INR' ? '₹' : '$');
 
   // Update localStorage when currency changes
   useEffect(() => {
     localStorage.setItem('selectedCurrency', currency);
     localStorage.setItem('selectedCountry', country);
-    setSymbol(currency === 'INDIA' ?  '₹': '$');
+    setSymbol(currency === 'INR' ?  '₹': '$');
   }, [currency, country]);
  
 

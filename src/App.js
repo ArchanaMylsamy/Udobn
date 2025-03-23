@@ -22,17 +22,20 @@ import LastVisitedTracker from './components/LastVisitedTracker';
 import {CurrencyProvider} from './context/CurrencyContext'
 import OrderSuccessPage from './pages/Order/sucess';
 import OrderList from './pages/Order/orders'
+import SimpleCart from './components/Cart';
 
 function App() {
   
   return (
     <div className="App">
       <CartProvider> 
+      
       <WhatsAppIcon/>
       <BrowserRouter>
       <CurrencyProvider>
       <LastVisitedTracker/>
       <Navbar/>
+      <SimpleCart/>
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/about" element={<About/>}/>

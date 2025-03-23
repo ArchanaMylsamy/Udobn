@@ -2,7 +2,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-.hero {
+.hero-men {
   height: 60vh;
   background-image: url("../../assets/men-collections.jpg");
   background-size: cover;
@@ -23,7 +23,7 @@
   letter-spacing: 0.2em;
 }
 
-.hero h1 {
+.hero-men h1 {
   font-size: 4rem;
   font-weight: 300;
   margin: 0;
@@ -118,15 +118,17 @@
   display: flex;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  
 }
 
 .size {
   color: #666;
   font-size: 0.9rem;
+  padding: 5px;
 }
 
 @media (max-width: 768px) {
-  .hero h1 {
+  .hero-men h1 {
     font-size: 2.5rem;
   }
 
@@ -224,7 +226,7 @@ color: white;
 
 .add-to-cart {
 width: 100%;
-background-color: #333;
+background-color: #000000;
 color: white;
 border: none;
 padding: 0.75rem;
@@ -300,3 +302,41 @@ color: #666;
 font-size: 16px;
 }
 
+
+/* Product Image Carousel Styling */
+.product-image-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.product-image-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.product-image-carousel button {
+  transition: all 0.2s ease;
+}
+
+.product-image-carousel button:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Ensure the product-image container has proper dimensions */
+.product-card .product-image {
+  position: relative;
+  height: 300px; /* Adjust based on your design */
+  overflow: hidden;
+}
+
+/* Make dot indicators more visible on light backgrounds */
+.product-image-carousel .dot-indicator {
+  padding: 4px 8px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+}

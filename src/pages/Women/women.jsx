@@ -6,6 +6,7 @@ import SimpleCart from "../../components/Cart";
 import { useCart } from "../../context/CartContext";
 import { useCurrency } from '../../context/CurrencyContext';
 import axios from "axios";
+import ProductImageCarousel from "../../components/ProductImageCarousel"; // Import the new component
 
 export default function WomensCollection() {
   const { addToCart, cartItemsCount, setIsCartOpen, currency } = useCart();
@@ -15,8 +16,6 @@ export default function WomensCollection() {
   const [sortOrder, setSortOrder] = useState("alphabetically");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const { formatPrice } = useCurrency();
-  // Store selected sizes locally in this component
-  
   
   const categories = [
     { id: "all", name: "All Products" },
@@ -32,14 +31,12 @@ export default function WomensCollection() {
       once: true,
     });
     
-    // Fetch products from the backend
     fetchProducts();
   }, []);
   
   useEffect(() => {
-    // Apply filters and sorting whenever products or filter criteria change
     applyFiltersAndSort();
-  }, [products, selectedCategory, sortOrder, currency]); // Add currency as a dependency
+  }, [products, selectedCategory, sortOrder, currency]);
   
   const fetchProducts = async () => {
     try {
@@ -50,7 +47,6 @@ export default function WomensCollection() {
     }
   };
   
-
   const applyFiltersAndSort = () => {
     let result = [...products];
     
@@ -106,7 +102,6 @@ export default function WomensCollection() {
         break;
     }
     
-    
     setFilteredProducts(result);
   };
    
@@ -118,18 +113,13 @@ export default function WomensCollection() {
     setSelectedCategory(categoryId);
   };
   
-  
-  
-  // Parse sizes properly
   const parseSizes = (product) => {
     if (!product.sizes) return [];
     
-    // Parse the sizes array properly
     let parsedSizes = [];
     if (Array.isArray(product.sizes)) {
       try {
         parsedSizes = product.sizes.map(size => {
-          // Remove quotes and brackets
           return size.replace(/[\[\]"\\]/g, '');
         });
       } catch (e) {
@@ -140,27 +130,22 @@ export default function WomensCollection() {
     return parsedSizes;
   };
   
-  // Handle size selection specifically for this component
   const [selectedSizes, setSelectedSizes] = useState({});
 
   const handleSizeSelect = (productId, size) => {
     setSelectedSizes((prevSizes) => {
       const currentSize = prevSizes[productId];
   
-      // If the user clicks the same size again, deselect it
       if (currentSize === size) {
         const newSizes = { ...prevSizes };
-        delete newSizes[productId]; // Remove the selected size
+        delete newSizes[productId];
         return newSizes;
       }
   
-      // Otherwise, update the size
-      const newSizes = { ...prevSizes, [productId]: size };
-      return newSizes;
+      return { ...prevSizes, [productId]: size };
     });
   };
 
-  // Handle adding to cart with the selected size
   const handleAddToCart = (product) => {
     const selectedSize = selectedSizes[product._id];
     if (!selectedSize) {
@@ -182,7 +167,6 @@ export default function WomensCollection() {
       </header>
       <main>
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 py-5 ps-2">
-        {/* Category Tabs (Left-Aligned) */}
         <div className="flex flex-wrap justify-center md:justify-start gap-2">
           {categories.map(category => (
             <button
@@ -197,7 +181,6 @@ export default function WomensCollection() {
           ))}
         </div>
 
-        {/* Sort Dropdown (Right-Aligned) */}
         <div className="flex items-center justify-center md:justify-end w-full md:w-auto pe-2">
           <label htmlFor="sort-select" className="mr-2 font-medium text-gray-700">Sort by:</label>
           <select
@@ -217,7 +200,11 @@ export default function WomensCollection() {
           filteredProducts.map((product) => (
             <div key={product._id} className="product-card">
               <div className="product-image">
-                <img src={product.images[0]} alt={product.name} />
+                {/* Replace the single image with the carousel component */}
+                <ProductImageCarousel 
+                  images={product.images} 
+                  productName={product.name} 
+                />
               </div>
               <div className="product-info">
                 <span className="brand">{product.brand}</span>
@@ -249,7 +236,6 @@ export default function WomensCollection() {
         )}
       </div>           
       </main>
-      {/* Simple Cart Component */}
       <SimpleCart />
     </div>
   );
