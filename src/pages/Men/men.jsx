@@ -171,7 +171,7 @@ export default function MensCollection() {
           {categories.map(category => (
             <button
               key={category.id}
-              className={`px-4 py-2 rounded-md border ${
+              className={`px-4 py-2  border ${
                 selectedCategory === category.id ? 'bg-black text-white' : 'bg-gray-100 text-gray-800'
               }`}
               onClick={() => handleCategoryChange(category.id)}

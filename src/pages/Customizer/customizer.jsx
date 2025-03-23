@@ -561,7 +561,7 @@ const showCustomAlert = (message, options = {}) => {
     emailInput.style.width = '100%';
     emailInput.style.padding = '8px';
     emailInput.style.marginTop = '5px';
-    emailInput.style.borderRadius = '4px';
+    
     emailInput.style.border = '1px solid #ccc';
     emailInput.required = true;
     content.appendChild(emailInput);
@@ -875,7 +875,7 @@ const offsetPoints = (points, x, y) => {
           backgroundColor: viewSide === 'front' ? '#000000' : '#e0e0e0',
           color: viewSide === 'front' ? 'white' : 'black',
           border: 'none',
-          borderRadius: '4px',
+          
           cursor: 'pointer'
         }}
       >
@@ -891,7 +891,7 @@ const offsetPoints = (points, x, y) => {
           backgroundColor: viewSide === 'back' ? '#000000' : '#e0e0e0',
           color: viewSide === 'back' ? 'white' : 'black',
           border: 'none',
-          borderRadius: '4px',
+          
           cursor: 'pointer'
         }}
       >
@@ -910,7 +910,7 @@ const offsetPoints = (points, x, y) => {
           backgroundColor: shirtStyle === 'regular' ? '#000000' : '#e0e0e0',
           color: shirtStyle === 'regular' ? 'white' : 'black',
           border: 'none',
-          borderRadius: '4px',
+          
           cursor: 'pointer'
         }}
       >
@@ -923,7 +923,7 @@ const offsetPoints = (points, x, y) => {
           backgroundColor: shirtStyle === 'crop' ? '#000000' : '#e0e0e0',
           color: shirtStyle === 'crop' ? 'white' : 'black',
           border: 'none',
-          borderRadius: '4px',
+         
           cursor: 'pointer'
         }}
       >
@@ -936,7 +936,7 @@ const offsetPoints = (points, x, y) => {
           backgroundColor: shirtStyle === 'baggy' ? '#000000' : '#e0e0e0',
           color: shirtStyle === 'baggy' ? 'white' : 'black',
           border: 'none',
-          borderRadius: '4px',
+          
           cursor: 'pointer'
         }}
       >
@@ -1413,7 +1413,7 @@ const offsetPoints = (points, x, y) => {
         backgroundColor: '#000000',
         color: 'white',
         border: 'none',
-        borderRadius: '4px',
+        
         cursor: 'pointer'
       }}
     >
@@ -1426,7 +1426,7 @@ const offsetPoints = (points, x, y) => {
         backgroundColor: '#000000',
         color: 'white',
         border: 'none',
-        borderRadius: '4px',
+        
         cursor: 'pointer'
       }}
     >
@@ -1439,7 +1439,7 @@ const offsetPoints = (points, x, y) => {
         backgroundColor: '#000000',
         color: 'white',
         border: 'none',
-        borderRadius: '4px',
+        
         cursor: 'pointer'
       }}
     >
@@ -1452,7 +1452,7 @@ const offsetPoints = (points, x, y) => {
         backgroundColor: '#000000',
         color: 'white',
         border: 'none',
-        borderRadius: '4px',
+        
         cursor: 'pointer'
       }}
     >
@@ -1465,7 +1465,7 @@ const offsetPoints = (points, x, y) => {
         backgroundColor: '#000000',
         color: 'white',
         border: 'none',
-        borderRadius: '4px',
+        
         cursor: 'pointer'
       }}
     >
@@ -1478,7 +1478,7 @@ const offsetPoints = (points, x, y) => {
         backgroundColor: '#000000',
         color: 'white',
         border: 'none',
-        borderRadius: '4px',
+        
         cursor: 'pointer'
       }}
     >
@@ -1531,7 +1531,7 @@ const offsetPoints = (points, x, y) => {
                     width: '100%',
                     padding: '8px',
                     marginBottom: '10px',
-                    borderRadius: '4px',
+                    
                     border: '1px solid #ccc'
                   }}
                 />
