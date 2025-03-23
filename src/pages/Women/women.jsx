@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import "./menstyle.css";
+import "./womenstyle.css";
 import SimpleCart from "../../components/Cart";
 import { useCart } from "../../context/CartContext";
 import { useCurrency } from '../../context/CurrencyContext';
 import axios from "axios";
 
-export default function MensCollection() {
+export default function WomensCollection() {
   const { addToCart, cartItemsCount, setIsCartOpen, currency } = useCart();
   
   const [products, setProducts] = useState([]);
@@ -43,7 +43,7 @@ export default function MensCollection() {
   
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/products/gender/Male');
+      const response = await axios.get('http://localhost:5000/api/products/gender/Female');
       console.log(response);
       setProducts(response.data.products);
     } catch (error) {

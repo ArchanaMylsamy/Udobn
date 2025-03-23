@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useCart } from '../../context/CartContext';
 import logo from '../../assets/udobn_logo.png'
 import { useLocation } from 'react-router-dom';
+import razorpay from '../../assets/razorpay.png'
 export default function CheckoutPage() {
   const location = useLocation();
   useEffect(() => {
@@ -32,15 +33,76 @@ export default function CheckoutPage() {
     };
   }, []);
 
-  const handlePlaceOrder = () => {
-    if (paymentMethod === "razorpay") {
+  const handlePlaceOrder = async () => {
+    const orderData = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      address: document.getElementById('streetAddress').value,
+      city: document.getElementById('city').value,
+      state: document.getElementById('state').value,
+      zipCode: document.getElementById('zipCode').value,
+      amount: total,
+      items: cart
+    };
+  
+    const customerId ="65123456789abcdef1234567"; // Get logged-in user ID
+    if (!customerId) {
+      alert("Please log in to place an order.");
+      return;
+    }
+  
+    if (paymentMethod === "cash") {
+      try {
+        const products = cart.map(item => ({
+          productId: "65abcdef1234567890123456", // Ensure correct product ID
+          quantity: 2,
+          size: "M",
+        }));
+  
+        const response = await fetch('http://localhost:5000/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            customerId,
+            products,
+            totalAmount: { "inr": 1299, "usd": 15.65  }, // Convert INR to USD dynamically
+            paymentMethod: "COD",
+            paymentStatus: "Pending",
+            deliveryAddress: {
+              street: orderData.address,
+              city: orderData.city,
+              state: orderData.state,
+              country: 'India',
+              postalCode: orderData.zipCode,
+            },
+            orderStatus: "Pending",
+          }),
+        });
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          alert('Order placed successfully!');
+          localStorage.removeItem("cart"); // Clear cart
+          window.location.href = "/order-success"; // Redirect
+        } else {
+          alert('Failed to place order: ' + result.message);
+        }
+      } catch (error) {
+        console.error("Error placing order:", error);
+        alert("Unable to place order. Please try again.");
+      }
+    } else if (paymentMethod === "razorpay") {
       initiateRazorpayPayment();
     } else {
-      // Handle other payment methods
-      alert('Order placed successfully!');
+      alert('Please select a payment method.');
     }
   };
-
+  
   const initiateRazorpayPayment = async () => {
     // Collect form data
     const orderData = {
@@ -297,38 +359,6 @@ export default function CheckoutPage() {
             required
           />
         </div>
-
-        <div className="mb-6">
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="differentShipping"
-              className="mr-2"
-              checked={showShippingAddress}
-              onChange={() => setShowShippingAddress(!showShippingAddress)}
-            />
-            <label htmlFor="differentShipping" className="text-sm">Ship to a different address?</label>
-          </div>
-
-          {showShippingAddress && (
-            <div className="border border-gray-200 p-4 rounded">
-              {/* Shipping address fields would go here */}
-              <p className="text-sm text-gray-500">Shipping address fields</p>
-            </div>
-          )}
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="orderNotes" className="block mb-2">
-            Order notes (optional)
-          </label>
-          <textarea
-            id="orderNotes"
-            rows="4"
-            placeholder="Notes about your order, e.g. special notes for delivery."
-            className="w-full border border-gray-300 rounded p-2"
-          ></textarea>
-        </div>
       </div>
       
       {/* Right Column - Order Summary */}
@@ -381,9 +411,6 @@ export default function CheckoutPage() {
                 />
                 <label htmlFor="cashOnDelivery">Cash on delivery</label>
               </div>
-              {paymentMethod === "cash" && (
-                <p className="text-sm text-gray-500 ml-6">Pay with cash upon delivery.</p>
-              )}
             </div>
             
             
@@ -399,8 +426,8 @@ export default function CheckoutPage() {
                   className="mr-2" 
                 />
                 <label htmlFor="payByRazorpay" className="flex items-center">
-                  <span className="mr-2">Pay by Razorpay</span>
-                  <img src="https://cdn.razorpay.com/logo/rzp-glyph.svg" alt="Razorpay" className="h-6" />
+                  <span className="mr-2">Pay by </span>
+                  <img src={razorpay} alt="Razorpay" className="h-12" />
                 </label>
               </div>
               {paymentMethod === "razorpay" && (

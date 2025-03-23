@@ -2,6 +2,7 @@ import { Shirt } from "lucide-react";
 import { useState, useEffect } from "react"
 import { ShoppingCart, Search, Menu, X, ChevronDown, User, Instagram, ChevronRight } from "lucide-react"
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext'; // Import our new context
 import {Link} from "react-router-dom"
 
 import logo from "../assets/udobn_logo.png"
@@ -14,16 +15,24 @@ export default function Navbar() {
   const [activeMenu, setActiveMenu] = useState(null)
   const [activeCategory, setActiveCategory] = useState("All Products")
   const [isCountryMenuOpen, setIsCountryMenuOpen] = useState(false)
-  const { cartItemsCount, setIsCartOpen } = useCart();
+  const { cartItemsCount, setIsCartOpen, setCurrency } = useCart();
+  const { currency, country, updateCurrency } = useCurrency(); // Use our new context
 
+  // Updated countries to include India and USA only
   const countries = [
-    { name: "Sweden", currency: "SEK kr" },
-    { name: "Norway", currency: "NOK kr" },
-    { name: "Denmark", currency: "DKK kr" },
-    { name: "Finland", currency: "EUR" },
+    { name: "USA", currency: "USD", symbol: "$" },
+    { name: "India", currency: "INR", symbol: "₹" }
   ]
 
-  const [selectedCountry, setSelectedCountry] = useState(countries[0])
+  const selectedCountry = countries.find(c => c.currency === currency) || countries[0];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const menuData = {
     Men: {
@@ -65,7 +74,7 @@ export default function Navbar() {
       featuredText: "Women's Latest Trends",
       categories: {
         "All Products": [
-          { name: "T-Shirts", link: "/women/t-shirts" },
+          { name: "T-Shirts", link: "/women/clothing" },
           { name: "Hoodies", link: "/women/hoodies" },
           { name: "Sweatshirts", link: "/women/sweatshirts" },
           { name: "Sports T-Shirts", link: "/women/sports-t-shirts" },
@@ -96,14 +105,6 @@ export default function Navbar() {
     },
   }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
     setActiveMenu(null)
@@ -126,6 +127,10 @@ export default function Navbar() {
     setActiveCategory("All Products")
   }
 
+  const handleCountryChange = (country) => {
+    updateCurrency(country.currency, country.name);
+    setIsCountryMenuOpen(false);
+  }
   return (
     <nav
       className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -139,14 +144,14 @@ export default function Navbar() {
             <a to="https://instagram.com" className="hover:text-gray-300">
               <Instagram className="w-5 h-5" />
             </a>
-            <span className="text-sm hidden sm:block">Welcome to One Nice Shop!</span>
+            <span className="text-sm hidden sm:block">Welcome to Udobn Shop!</span>
             <div className="relative">
               <button
                 onClick={() => setIsCountryMenuOpen(!isCountryMenuOpen)}
                 className="flex items-center space-x-1 text-sm hover:text-gray-300"
               >
                 <span>
-                  {selectedCountry.name} ({selectedCountry.currency})
+                  {selectedCountry.name} ({selectedCountry.currency} {selectedCountry.symbol})
                 </span>
                 <ChevronDown className="w-4 h-4" />
               </button>
@@ -155,13 +160,10 @@ export default function Navbar() {
                   {countries.map((country) => (
                     <button
                       key={country.name}
-                      onClick={() => {
-                        setSelectedCountry(country)
-                        setIsCountryMenuOpen(false)
-                      }}
+                      onClick={() => handleCountryChange(country)}
                       className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
                     >
-                      {country.name} ({country.currency})
+                      {country.name} ({country.currency} {country.symbol})
                     </button>
                   ))}
                 </div>
@@ -179,7 +181,7 @@ export default function Navbar() {
           </Link>
  
           <div className="hidden md:flex space-x-8">
-            {Object.keys(menuData).map((item) => (
+            {/* {Object.keys(menuData).map((item) => (
               <button
                 key={item}
                 className="hover:text-gray-600 flex items-center gap-1"
@@ -188,9 +190,24 @@ export default function Navbar() {
                 {item}
                 <ChevronDown className="w-4 h-4" />
               </button>
-            ))}
+            ))} */}
 
-           
+            <Link
+              to="/men/clothing"
+              className="hover:text-gray-600"
+              onClick={handleNavClick}
+              onMouseEnter={() => setActiveMenu(null)}
+            >
+              Men
+            </Link>
+            <Link
+              to="/women/clothing"
+              className="hover:text-gray-600"
+              onClick={handleNavClick}
+              onMouseEnter={() => setActiveMenu(null)}
+            >
+              Women
+            </Link>
             <Link
               to="/about"
               className="hover:text-gray-600"
@@ -213,9 +230,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/search">
-              <Search className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-            </Link>
+           
             <Link to="/login">
               <User className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             </Link>
@@ -353,10 +368,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center justify-around mt-8 pt-4 border-t border-gray-100">
-              <Link to="/search" className="flex flex-col items-center" onClick={toggleMobileMenu}>
-                <Search className="w-6 h-6 mb-1" />
-                <span className="text-xs">Search</span>
-              </Link>
+              
               <Link to="/login" className="flex flex-col items-center" onClick={toggleMobileMenu}>
                 <User className="w-6 h-6 mb-1" />
                 <span className="text-xs">Account</span>
@@ -372,4 +384,3 @@ export default function Navbar() {
     </nav>
   )
 }
-
