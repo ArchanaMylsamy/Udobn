@@ -16,7 +16,7 @@ export default function WomensCollection() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const { formatPrice } = useCurrency();
   // Store selected sizes locally in this component
-  const [selectedSizes, setSelectedSizes] = useState({});
+  
   
   const categories = [
     { id: "all", name: "All Products" },
@@ -44,7 +44,6 @@ export default function WomensCollection() {
   const fetchProducts = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/products/gender/Female');
-      console.log(response);
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -142,16 +141,28 @@ export default function WomensCollection() {
   };
   
   // Handle size selection specifically for this component
+  const [selectedSizes, setSelectedSizes] = useState({});
+
   const handleSizeSelect = (productId, size) => {
-    setSelectedSizes(prev => ({
-      ...prev,
-      [productId]: size // This ensures only the selected product is updated
-    }));
-  };  
+    setSelectedSizes((prevSizes) => {
+      const currentSize = prevSizes[productId];
   
+      // If the user clicks the same size again, deselect it
+      if (currentSize === size) {
+        const newSizes = { ...prevSizes };
+        delete newSizes[productId]; // Remove the selected size
+        return newSizes;
+      }
+  
+      // Otherwise, update the size
+      const newSizes = { ...prevSizes, [productId]: size };
+      return newSizes;
+    });
+  };
+
   // Handle adding to cart with the selected size
   const handleAddToCart = (product) => {
-    const selectedSize = selectedSizes[product.id];
+    const selectedSize = selectedSizes[product._id];
     if (!selectedSize) {
       alert("Please select a size first");
       return;
@@ -159,10 +170,7 @@ export default function WomensCollection() {
     
     addToCart({
       ...product,
-      selectedSize: selectedSize,
-      
-      
-      
+      selectedSize: selectedSize,  
     });
   };
   
@@ -173,7 +181,7 @@ export default function WomensCollection() {
         <h1>Women's Collection</h1>
       </header>
       <main>
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 py-5">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 py-5 ps-2">
         {/* Category Tabs (Left-Aligned) */}
         <div className="flex flex-wrap justify-center md:justify-start gap-2">
           {categories.map(category => (
@@ -190,7 +198,7 @@ export default function WomensCollection() {
         </div>
 
         {/* Sort Dropdown (Right-Aligned) */}
-        <div className="flex items-center justify-center md:justify-end w-full md:w-auto">
+        <div className="flex items-center justify-center md:justify-end w-full md:w-auto pe-2">
           <label htmlFor="sort-select" className="mr-2 font-medium text-gray-700">Sort by:</label>
           <select
             id="sort-select"
@@ -207,9 +215,9 @@ export default function WomensCollection() {
       <div className="products-grid">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product.id} className="product-card">
+            <div key={product._id} className="product-card">
               <div className="product-image">
-                <img src={product.images[0] || "/placeholder.svg"} alt={product.name} />
+                <img src={product.images[0]} alt={product.name} />
               </div>
               <div className="product-info">
                 <span className="brand">{product.brand}</span>
@@ -218,9 +226,11 @@ export default function WomensCollection() {
                 <div className="sizes">
                   {parseSizes(product).map((size) => (
                     <span
-                      key={`${product.id}-${size}`}
-                      className={`size ${selectedSizes[product.id] === size ? 'selected' : ''}`}
-                      onClick={() => handleSizeSelect(product.id, size)}
+                      key={`${product._id}-${size}`}
+                      className={`size ${selectedSizes[product._id] === size ? 'selected' : ''}`}
+                      onClick={() => {
+                        handleSizeSelect(product._id, size);
+                      }}
                     >
                       {size}
                     </span>

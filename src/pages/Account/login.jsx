@@ -108,10 +108,19 @@ const LoginForm = () => {
       });
 
       const result = await response.json();
+      
       if (response.ok) {
         alert(result.message);
-        // Store the token securely (e.g., in a cookie or local storage)
+        // Store the token securely
         sessionStorage.setItem('token', result.token);
+  
+        // Store the user ID for checkout purposes
+        if (result.userId) {
+          sessionStorage.setItem('userId', result.userId);
+          // You can also store in localStorage if you want it to persist longer
+          // localStorage.setItem('userId', result.userId);
+        }
+        
         // Redirect to the previous page or a default one
         const from = localStorage.getItem('lastVisited') || '/';
         navigate(from, { replace: true });

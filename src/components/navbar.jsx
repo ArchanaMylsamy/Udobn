@@ -1,6 +1,6 @@
 import { Shirt } from "lucide-react";
 import { useState, useEffect } from "react"
-import { ShoppingCart, Search, Menu, X, ChevronDown, User, Instagram, ChevronRight } from "lucide-react"
+import { ShoppingCart, Search, Menu, X, ChevronDown, User, Instagram, ChevronRight ,ShoppingBag } from "lucide-react"
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext'; // Import our new context
 import {Link} from "react-router-dom"
@@ -230,7 +230,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-6">
-           
+            <Link to="/orders" className="flex items-center">
+              <ShoppingBag className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+            </Link>
             <Link to="/login">
               <User className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             </Link>
@@ -368,7 +370,9 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center justify-around mt-8 pt-4 border-t border-gray-100">
-              
+              <Link to="/orders" className="flex items-center">
+                <ShoppingBag className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+              </Link>
               <Link to="/login" className="flex flex-col items-center" onClick={toggleMobileMenu}>
                 <User className="w-6 h-6 mb-1" />
                 <span className="text-xs">Account</span>

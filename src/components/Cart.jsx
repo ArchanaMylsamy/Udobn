@@ -1,7 +1,7 @@
-// First, modify SimpleCart.jsx to navigate to checkout page
 import React from 'react';
 import './Cart.css';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function SimpleCart() {
@@ -10,17 +10,18 @@ export default function SimpleCart() {
     setIsCartOpen,
     cart,
     removeFromCart,
-    updateQuantity,
-    subtotal
+    updateQuantity
   } = useCart();
   
+  // Use currency context separately
+  const { currency, formatPrice } = useCurrency();
   const navigate = useNavigate();
   
   if (!isCartOpen) return null;
   
   const handleCheckout = () => {
     const token = sessionStorage.getItem('token');
-  
+    
     if (!token) {
       alert('Please log in to proceed to checkout!');
       navigate('/login');
@@ -30,6 +31,20 @@ export default function SimpleCart() {
     }
   };
   
+  // Calculate subtotal here instead of in CartContext to use the current currency
+  const subtotal = cart.reduce((total, item) => {
+    const itemPrice = currency === "USD" ? item.price.usd : item.price.inr;
+    return total + itemPrice * item.quantity;
+  }, 0);
+  
+  // Helper to format currency
+  const formatCurrency = (amount) => {
+    if (currency === "USD") {
+      return `$${amount.toFixed(2)}`;
+    } else {
+      return `₹${amount.toFixed(2)}`;
+    }
+  };
   
   return (
     <div className="simple-cart-overlay">
@@ -50,49 +65,53 @@ export default function SimpleCart() {
             </div>
             
             <div className="simple-cart-items">
-              {cart.map((item, index) => (
-                <div key={`${item.id}-${item.size}`} className="simple-cart-item">
-                  <div className="simple-item-image">
-                    <img src={item.image} alt={item.name} />
-                  </div>
-                  <div className="simple-item-details">
-                    <div className="simple-item-top">
-                      <h3>{item.name}</h3>
-                      <button
-                        className="simple-remove-item"
-                        onClick={() => removeFromCart(index)}
-                      >
-                        ×
-                      </button>
+              {cart.map((item, index) => {
+                // Get the current price based on currency
+                const itemPrice = currency === "USD" ? item.price.usd : item.price.inr;
+                
+                return (
+                  <div key={`${item.id}-${item.size}-${index}`} className="simple-cart-item">
+                    <div className="simple-item-image">
+                      <img src={item.image} alt={item.name} />
                     </div>
-                    <p>Color: {item.color || 'Default'}</p>
-                    <p>Size: {item.size}</p>
-                    <div className="simple-quantity-controls">
-                      <button onClick={() => updateQuantity(index, Math.max(1, item.quantity - 1))}>−</button>
-                      <input
-                        type="text"
-                        value={item.quantity}
-                        onChange={(e) => {
-                          const val = parseInt(e.target.value);
-                          if (!isNaN(val) && val > 0) {
-                            updateQuantity(index, val);
-                          }
-                        }}
-                      />
-                      <button onClick={() => updateQuantity(index, item.quantity + 1)}>+</button>
+                    <div className="simple-item-details">
+                      <div className="simple-item-top">
+                        <h3>{item.name}</h3>
+                        <button
+                          className="simple-remove-item"
+                          onClick={() => removeFromCart(index)}
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <p>Size: {item.size}</p>
+                      <div className="simple-quantity-controls">
+                        <button onClick={() => updateQuantity(index, Math.max(1, item.quantity - 1))}>−</button>
+                        <input
+                          type="text"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            if (!isNaN(val) && val > 0) {
+                              updateQuantity(index, val);
+                            }
+                          }}
+                        />
+                        <button onClick={() => updateQuantity(index, item.quantity + 1)}>+</button>
+                      </div>
+                    </div>
+                    <div className="simple-item-price">
+                      {formatCurrency(itemPrice * item.quantity)}
                     </div>
                   </div>
-                  <div className="simple-item-price">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             
             <div className="simple-cart-footer">
               <div className="simple-cart-subtotal">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{formatCurrency(subtotal)}</span>
               </div>
               <div className="simple-shipping-info">
                 <span>Shipping</span>

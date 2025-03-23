@@ -1,4 +1,3 @@
-// src/context/CartContext.jsx
 import { createContext, useState, useEffect, useContext } from 'react';
 
 // Create the context
@@ -47,11 +46,18 @@ export const CartProvider = ({ children }) => {
   };
   
   const addToCart = (product) => {
-    const selectedSize = selectedSizes[product.id] || product.sizes[0];
+    // Use _id as per WomensCollection and respect the selectedSize property
+    const productId = product._id;
+    const selectedSize = product.selectedSize;
     
-    // Check if item already exists in cart with the same size
+    if (!selectedSize) {
+      console.error("No size selected for product:", product);
+      return;
+    }
+    
+    // Check if item already exists in cart with the same ID and size
     const existingItemIndex = cart.findIndex(
-      item => item.id === product.id && item.size === selectedSize
+      item => item.id === productId && item.size === selectedSize
     );
     
     if (existingItemIndex >= 0) {
@@ -60,14 +66,14 @@ export const CartProvider = ({ children }) => {
       updatedCart[existingItemIndex].quantity += 1;
       setCart(updatedCart);
     } else {
-      // If item doesn't exist, add it to cart
+      // If item doesn't exist, add it to cart with proper properties
       setCart([...cart, {
-        id: product.id,
+        id: productId,
         name: product.name,
         brand: product.brand,
-        price: product.price,
-        image: product.image || "/placeholder.svg",
-        color: product.color || "Default",
+        // Store both price formats to support currency switching
+        price: product.price, // Store the complete price object with usd and inr
+        image: product.images && product.images.length > 0 ? product.images[0] : "/placeholder.svg",
         size: selectedSize,
         quantity: 1
       }]);
@@ -91,9 +97,6 @@ export const CartProvider = ({ children }) => {
     setCart(newCart);
   };
   
-  // Calculate subtotal
-  const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  
   // Calculate cart items count
   const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
   
@@ -101,7 +104,6 @@ export const CartProvider = ({ children }) => {
     cart,
     isCartOpen,
     selectedSizes,
-    subtotal,
     cartItemsCount,
     setIsCartOpen,
     handleSizeSelect,

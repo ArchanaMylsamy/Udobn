@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from '../../context/CartContext';
-import logo from '../../assets/udobn_logo.png'
+import { useCurrency } from '../../context/CurrencyContext';
+import logo from '../../assets/udobn_logo.png';
 import { useLocation } from 'react-router-dom';
-import razorpay from '../../assets/razorpay.png'
+import razorpay from '../../assets/razorpay.png';
+
 export default function CheckoutPage() {
   const location = useLocation();
   useEffect(() => {
@@ -11,13 +13,55 @@ export default function CheckoutPage() {
     window.scrollTo(0, 0);
   }, [location]);
 
-  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [paymentMethod, setPaymentMethod] = useState("COD");
   const [showShippingAddress, setShowShippingAddress] = useState(false);
   const { cart, subtotal } = useCart();
+  const { currency, currencySymbol } = useCurrency();
   
-  // Calculate shipping fee
-  const shippingFee = 49.00;
-  const total = subtotal + shippingFee;
+  // Calculate shipping fee based on current currency
+  const shippingFee = currency === 'USD' ? 0.59 : 49.00;
+  
+  // Calculate cart subtotal based on currency
+  const calculateSubtotal = () => {
+    if (!cart || cart.length === 0) return 0;
+    
+    return cart.reduce((total, item) => {
+      const price = getItemPrice(item);
+      return total + (price * (item.quantity || 1));
+    }, 0);
+  };
+
+  // Get the item price based on current currency
+  const getItemPrice = (item) => {
+    if (item && item.price) {
+      if (typeof item.price === 'object') {
+        return currency === 'USD' ? item.price.usd : item.price.inr;
+      }
+      return item.price;
+    }
+    return 0;
+  };
+
+  // Calculated values based on current currency
+  const currencySubtotal = calculateSubtotal();
+  const currencyTotal = currencySubtotal + shippingFee;
+
+  // Calculate both currency totals for the API
+  const getINRTotal = () => {
+    if (currency === 'INR') {
+      return currencyTotal;
+    }else{
+      return 0;
+    }
+  };
+
+  const getUSDTotal = () => {
+    if (currency === 'USD') {
+      return currencyTotal;
+    } else {
+      return 0;
+    }
+  };
 
   // Load Razorpay script
   useEffect(() => {
@@ -34,6 +78,13 @@ export default function CheckoutPage() {
   }, []);
 
   const handlePlaceOrder = async () => {
+    const customerId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
+    if (!customerId) {
+      alert("Please log in to place an order.");
+      return;
+    }
+  
+    // Get form data
     const orderData = {
       firstName: document.getElementById('firstName').value,
       lastName: document.getElementById('lastName').value,
@@ -43,40 +94,50 @@ export default function CheckoutPage() {
       city: document.getElementById('city').value,
       state: document.getElementById('state').value,
       zipCode: document.getElementById('zipCode').value,
-      amount: total,
+      country: document.getElementById('country').value, 
+      amount: currencyTotal,
       items: cart
     };
-  
-    const customerId ="65123456789abcdef1234567"; // Get logged-in user ID
-    if (!customerId) {
-      alert("Please log in to place an order.");
+    
+    // Form validation
+    if (!orderData.firstName || !orderData.lastName || !orderData.email || !orderData.phone || 
+        !orderData.address || !orderData.city || !orderData.state || !orderData.zipCode) {
+      alert("Please fill all required fields.");
       return;
     }
   
-    if (paymentMethod === "cash") {
-      try {
-        const products = cart.map(item => ({
-          productId: "65abcdef1234567890123456", // Ensure correct product ID
-          quantity: 2,
-          size: "M",
-        }));
+    // Calculate both currency totals for the API
+    const totalAmountInr = getINRTotal();
+    const totalAmountUsd = getUSDTotal();
   
+    // Extract product information for the order
+    const products = cart.map(item => ({
+      productId: item.id, 
+      quantity: item.quantity || 1,
+      size: item.size || "M",
+      price: item.price
+    }));
+  
+    try {
+      if (paymentMethod === "COD") {
         const response = await fetch('http://localhost:5000/api/orders', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify({
             customerId,
             products,
-            totalAmount: { "inr": 1299, "usd": 15.65  }, // Convert INR to USD dynamically
-            paymentMethod: "COD",
+            totalAmountInr, // Sending as separate fields to match backend
+            totalAmountUsd, // Sending as separate fields to match backend
+            paymentMethod,
             paymentStatus: "Pending",
             deliveryAddress: {
               street: orderData.address,
               city: orderData.city,
               state: orderData.state,
-              country: 'India',
+              country: orderData.country,
               postalCode: orderData.zipCode,
             },
             orderStatus: "Pending",
@@ -87,46 +148,32 @@ export default function CheckoutPage() {
   
         if (response.ok) {
           alert('Order placed successfully!');
-          localStorage.removeItem("cart"); // Clear cart
-          window.location.href = "/order-success"; // Redirect
+          localStorage.removeItem("cart");
+          window.location.href = "/order-success";
         } else {
           alert('Failed to place order: ' + result.message);
         }
-      } catch (error) {
-        console.error("Error placing order:", error);
-        alert("Unable to place order. Please try again.");
+      } else if (paymentMethod === "razorpay") {
+        initiateRazorpayPayment(orderData, totalAmountInr, totalAmountUsd);
       }
-    } else if (paymentMethod === "razorpay") {
-      initiateRazorpayPayment();
-    } else {
-      alert('Please select a payment method.');
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Unable to place order. Please try again.");
     }
   };
   
-  const initiateRazorpayPayment = async () => {
-    // Collect form data
-    const orderData = {
-      firstName: document.getElementById('firstName').value,
-      lastName: document.getElementById('lastName').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      address: document.getElementById('streetAddress').value,
-      city: document.getElementById('city').value,
-      state: document.getElementById('state').value,
-      zipCode: document.getElementById('zipCode').value,
-      amount: total,
-      items: cart
-    };
-    
+  const initiateRazorpayPayment = async (orderData, totalAmountInr, totalAmountUsd) => {
     try {
-      // Step 1: Call your backend to create a Razorpay order
+      // Step 1: Call your backend to create a Razorpay order with the current currency
       const response = await fetch('http://localhost:5000/api/razorpay/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          amount: total,
+          amount: currencyTotal,
+          currency: currency, // Using the currency from context
           receipt: 'order_rcpt_' + Date.now(),
           notes: {
             customerName: orderData.firstName + ' ' + orderData.lastName,
@@ -134,8 +181,8 @@ export default function CheckoutPage() {
             items: JSON.stringify(cart.map(item => ({
               id: item.id,
               name: item.name,
-              quantity: item.quantity,
-              price: item.price
+              quantity: item.quantity || 1,
+              price: getItemPrice(item)
             })))
           }
         }),
@@ -143,18 +190,22 @@ export default function CheckoutPage() {
       
       const orderResponse = await response.json();
       
+      if (!orderResponse.id) {
+        throw new Error("Failed to create Razorpay order");
+      }
+      
       // Step 2: Configure Razorpay options with the order_id from backend
       const options = {
-        key: "rzp_test_oGloudbiO4K40t", // Replace with your actual Razorpay Key ID
+        key: "rzp_test_oGloudbiO4K40t", // Your Razorpay Key ID
         amount: orderResponse.amount, // amount from the response
         currency: orderResponse.currency,
         name: "Udobn",
         description: "Purchase from Your Store",
-        image: {logo}, // Replace with your store logo
+        image: logo,
         order_id: orderResponse.id, // Order ID from the response
         handler: function(response) {
           // This function is called when payment is successful
-          verifyPayment(response, orderData);
+          verifyPayment(response, orderData, totalAmountInr, totalAmountUsd);
         },
         prefill: {
           name: orderData.firstName + " " + orderData.lastName,
@@ -170,11 +221,11 @@ export default function CheckoutPage() {
       };
       
       // Create Razorpay instance and open payment dialog
-      const razorpay = new window.Razorpay(options);
-      razorpay.on('payment.failed', function(response){
+      const razorpayInstance = new window.Razorpay(options);
+      razorpayInstance.on('payment.failed', function(response){
         alert("Payment failed. " + response.error.description);
       });
-      razorpay.open();
+      razorpayInstance.open();
       
     } catch (error) {
       console.error("Error creating order:", error);
@@ -182,19 +233,44 @@ export default function CheckoutPage() {
     }
   };
 
-  const verifyPayment = async (paymentResponse, orderData) => {
+  const verifyPayment = async (paymentResponse, orderData, totalAmountInr, totalAmountUsd) => {
     try {
+      // Get logged-in user ID
+      const customerId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
+      
+      // Extract product information from cart for order creation
+      const products = cart.map(item => ({
+        productId: item.id,
+        quantity: item.quantity || 1,
+        size: item.size || "M",
+        price: item.price
+      }));
+
       // Send payment verification details to backend
       const response = await fetch('http://localhost:5000/api/razorpay/verify-payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
           razorpay_payment_id: paymentResponse.razorpay_payment_id,
           razorpay_order_id: paymentResponse.razorpay_order_id,
           razorpay_signature: paymentResponse.razorpay_signature,
-          orderDetails: orderData
+          orderDetails: {
+            ...orderData,
+            customerId,
+            products,
+            totalAmountInr, // Sending as separate fields to match backend
+            totalAmountUsd, // Sending as separate fields to match backend
+            deliveryAddress: {
+              street: orderData.address,
+              city: orderData.city,
+              state: orderData.state,
+              country: orderData.country,
+              postalCode: orderData.zipCode,
+            },
+          }
         }),
       });
       
@@ -203,8 +279,8 @@ export default function CheckoutPage() {
       if (result.success) {
         // Payment verification successful
         alert("Payment successful! Order placed.");
-        // Redirect to success page or clear cart
-        // window.location.href = "/order-success";
+        localStorage.removeItem("cart"); // Clear cart
+        window.location.href = "/order-success"; // Redirect to success page
       } else {
         alert("Payment verification failed. Please contact support.");
       }
@@ -372,29 +448,40 @@ export default function CheckoutPage() {
           </div>
           
           <div className="border-t border-gray-200 pt-4 pb-4">
-            {cart.map((item) => (
-              <div key={`${item.id}-${item.size}`} className="flex justify-between mb-2">
-                <span>
-                  {item.name} - {item.size}, {item.color || 'Default'} × {item.quantity}
-                </span>
-                <span>₹{(item.price * item.quantity).toFixed(2)}</span>
-              </div>
-            ))}
+            {cart && cart.length > 0 ? (
+              cart.map((item) => (
+                <div key={`${item.id}-${item.size}`} className="flex justify-between items-center mb-3 py-2">
+                  <div className="flex items-center">
+                    <img 
+                      src={item.image} 
+                      alt={item.name} 
+                      className="w-16 h-16 object-cover rounded mr-3" 
+                    />
+                    <span>
+                      {item.name} - {item.size || "M"}, × {item.quantity || 1}
+                    </span>
+                  </div>
+                  <span>{currencySymbol}{(getItemPrice(item) * (item.quantity || 1)).toFixed(2)}</span>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-4">Your cart is empty</div>
+            )}
           </div>
           
           <div className="flex justify-between py-4 border-t border-gray-200">
             <span>Subtotal</span>
-            <span className="text-red-500">₹{subtotal.toFixed(2)}</span>
+            <span className="text-red-500">{currencySymbol}{currencySubtotal.toFixed(2)}</span>
           </div>
           
           <div className="flex justify-between py-4 border-t border-gray-200">
             <span>Shipping</span>
-            <span>Delivery Fees: ₹{shippingFee.toFixed(2)}</span>
+            <span>Delivery Fees: {currencySymbol}{shippingFee.toFixed(2)}</span>
           </div>
           
           <div className="flex justify-between py-4 border-t border-gray-200 font-bold">
             <span>Total</span>
-            <span className="text-red-500">₹{total.toFixed(2)}</span>
+            <span className="text-red-500">{currencySymbol}{currencyTotal.toFixed(2)}</span>
           </div>
           
           <div className="py-4">
@@ -402,24 +489,23 @@ export default function CheckoutPage() {
               <div className="flex items-center mb-2">
                 <input 
                   type="radio" 
-                  id="cashOnDelivery" 
-                  name="payment" 
-                  value="cash" 
-                  checked={paymentMethod === "cash"} 
-                  onChange={() => setPaymentMethod("cash")}
+                  id="COD" 
+                  name="paymentMethod" 
+                  value="COD" 
+                  checked={paymentMethod === "COD"} 
+                  onChange={() => setPaymentMethod("COD")}
                   className="mr-2" 
                 />
-                <label htmlFor="cashOnDelivery">Cash on delivery</label>
+                <label htmlFor="COD">Cash on delivery</label>
               </div>
             </div>
-            
             
             <div className="mb-6">
               <div className="flex items-center mb-2">
                 <input 
                   type="radio" 
                   id="payByRazorpay" 
-                  name="payment" 
+                  name="paymentMethod" 
                   value="razorpay" 
                   checked={paymentMethod === "razorpay"} 
                   onChange={() => setPaymentMethod("razorpay")}
@@ -442,6 +528,7 @@ export default function CheckoutPage() {
             <button 
               className="w-full py-3 bg-red-500 text-white font-bold rounded hover:bg-red-600 transition-colors"
               onClick={handlePlaceOrder}
+              disabled={!cart || cart.length === 0}
             >
               PLACE ORDER
             </button>

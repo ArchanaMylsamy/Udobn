@@ -1,5 +1,5 @@
-
 import { useEffect, useRef, useState } from "react"
+import { useLocation } from "react-router-dom"
 import { Instagram, ShoppingBag, Search, ChevronLeft, ChevronRight, MapPin, Gift, Truck } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import cloth_1 from '../../assets/cloth-1.jpg'
@@ -9,6 +9,11 @@ import shoe_1 from '../../assets/shoe-1.jpg'
 import shoe_2 from '../../assets/shoe-2.jpg'
 
 const CuratedBrands = () => {
+  const location = useLocation();
+    useEffect(() => {
+      // Reset scroll position to the top of the page whenever the route changes
+      window.scrollTo(0, 0);
+    }, [location]);
   const scrollContainerRef = useRef(null);
 
   const scroll = (direction) => {
