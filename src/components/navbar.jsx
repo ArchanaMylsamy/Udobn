@@ -336,40 +336,13 @@ export default function Navbar() {
             </div>
 
             <div className="space-y-2">
-              {Object.entries(menuData).map(([menu, data]) => (
-                <div key={menu} className="border-b border-gray-100">
-                  <button className="flex items-center justify-between w-full py-3" onClick={() => toggleMenu(menu)}>
-                    <span className="text-lg font-medium">{menu}</span>
-                    <ChevronDown
-                      className={`w-5 h-5 transition-transform ${activeMenu === menu ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {activeMenu === menu && (
-                    <div className="pb-4 pl-4">
-                      {Object.entries(data.categories).map(([category, items]) => (
-                        <div key={category} className="mb-4">
-                          <h3 className="text-sm font-semibold text-gray-400 mb-2">{category}</h3>
-                          <ul className="space-y-2">
-                            {items.map((item) => (
-                              <li key={item.name}>
-                                <Link
-                                  to={item.link}
-                                  className="text-gray-600 text-sm block py-1"
-                                  onClick={toggleMobileMenu}
-                                >
-                                  {item.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
               
+              <Link to="/men/clothing" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
+                Men
+              </Link>
+              <Link to="/women/clothing" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
+                Women
+              </Link>
               <Link to="/about" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
                 About Us
               </Link>
@@ -377,7 +350,7 @@ export default function Navbar() {
                 Contact
               </Link>
               <Link to="/customizer" className="block py-3 text-lg font-medium" onClick={toggleMobileMenu}>
-              Customize <Shirt className="w-5 h-5" />
+                Customize
               </Link>
               
             </div>

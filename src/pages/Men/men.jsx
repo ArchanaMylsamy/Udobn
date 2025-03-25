@@ -57,13 +57,13 @@ export default function MensCollection() {
   };
   
   const applyFiltersAndSort = () => {
-    let result = [...products];
+    let result = Array.isArray(products) ? [...products] : []; // Ensure products is an array
     
     // Apply category filter
     if (selectedCategory !== "all") {
       result = result.filter(product => {
-        const productCategory = product.category?.toLowerCase() || '';
-        const productName = product.name.toLowerCase() || '';
+        const productCategory = typeof product.category === "string" ? product.category.toLowerCase() : "";
+        const productName = typeof product.name === "string" ? product.name.toLowerCase() : "";
         
         switch(selectedCategory) {
           case "tshirts":
