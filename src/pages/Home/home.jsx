@@ -20,19 +20,23 @@ const CuratedBrands = () => {
   }, [location]);
 
   useEffect(() => {
-    // Fetch the recent 5 added products from the backend
     const fetchProducts = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/products/latest");
-        console.log(response)
-        setProducts(response.data);
+        
+        if (Array.isArray(response.data)) {
+          setProducts(response.data);
+        } else {
+          setProducts([]); // Ensure it's always an array
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
+        setProducts([]); // Handle errors safely
       }
     };
-
+  
     fetchProducts();
-  }, []);
+  }, []);  
 
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
