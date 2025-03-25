@@ -23,7 +23,6 @@ const CuratedBrands = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get("/api/products/latest");
-        setProducts(response.data);
         if (Array.isArray(response.data)) {
           setProducts(response.data);
         } else {
