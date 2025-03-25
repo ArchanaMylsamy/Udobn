@@ -28,7 +28,7 @@ export default function ContactPage() {
     setStatus("Sending...");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/email/send-email", formData);
+      const response = await axios.post("/api/email/send-email", formData);
       setStatus(response.data.message);
     } catch (error) {
       setStatus("Failed to send email.");
@@ -101,7 +101,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     placeholder="Name"
                     required
-                    className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    className="w-full p-2 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
                   />
                 </div>
                 <div className="space-y-2">
@@ -115,7 +115,7 @@ export default function ContactPage() {
                     onChange={handleChange} 
                     placeholder="Email"
                     required
-                    className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    className="w-full p-2 border border-gray-200  focus:outline-none focus:ring-2 focus:ring-gray-200"
                   />
                 </div>
               </div>
@@ -131,13 +131,13 @@ export default function ContactPage() {
                   placeholder="Message"
                   required
                   rows={6}
-                  className="w-full p-2 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  className="w-full p-2 border border-gray-200  resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-32 bg-black text-white hover:bg-black/90 rounded-md py-1.5 transition-colors duration-200"
+                className="w-32 bg-black text-white hover:bg-black/90  py-1.5 transition-colors duration-200"
               >
                 Send
               </button>

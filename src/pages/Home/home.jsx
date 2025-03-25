@@ -23,7 +23,7 @@ const CuratedBrands = () => {
     // Fetch the recent 5 added products from the backend
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/latest");
+        const response = await axios.get("/api/products/latest");
         console.log(response)
         setProducts(response.data);
       } catch (error) {

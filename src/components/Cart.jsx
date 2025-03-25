@@ -1,9 +1,9 @@
-import React from 'react';
+import React , {useState} from 'react';
 import './Cart.css';
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
 import { useNavigate } from 'react-router-dom';
-
+import Toast from './Toast';
 export default function SimpleCart() {
   const {
     isCartOpen,
@@ -16,14 +16,22 @@ export default function SimpleCart() {
   // Use currency context separately
   const { currency, formatPrice } = useCurrency();
   const navigate = useNavigate();
-  
+    const [toast, setToast] = useState(null);
+    const showToast = (message, type = 'info') => {
+      setToast({ message, type });
+    };
+    
+    const clearToast = () => {
+      setToast(null);
+    };
   if (!isCartOpen) return null;
   
   const handleCheckout = () => {
     const token = sessionStorage.getItem('token');
     
     if (!token) {
-      alert('Please log in to proceed to checkout!');
+   
+      showToast("Please log in to proceed to checkout!", 'error');
       navigate('/login');
     } else {
       setIsCartOpen(false);
@@ -48,6 +56,14 @@ export default function SimpleCart() {
   
   return (
     <div className="simple-cart-overlay">
+       {/* Toast Notification */}
+                         {toast && (
+                          <Toast 
+                            message={toast.message} 
+                            type={toast.type} 
+                            onClose={clearToast} 
+                          />
+                        )}
       <div className="simple-cart-drawer">
         <div className="simple-cart-header">
           <h2>Cart {cart.length > 0 ? `(${cart.length})` : ''}</h2>

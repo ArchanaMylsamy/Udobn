@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import { useNavigate } from "react-router-dom";
 import "aos/dist/aos.css";
@@ -8,11 +8,11 @@ import { useCart } from "../../context/CartContext";
 import { useCurrency } from '../../context/CurrencyContext';
 import axios from "axios";
 import ProductImageCarousel from "../../components/ProductImageCarousel"; // Import the new component
-
+import Toast from "../../components/Toast";
 export default function WomensCollection() {
   const navigate = useNavigate();
   const { addToCart, cartItemsCount, setIsCartOpen, currency } = useCart();
-  
+  const [toast, setToast] = useState(null);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortOrder, setSortOrder] = useState("alphabetically");
@@ -26,7 +26,13 @@ export default function WomensCollection() {
     { id: "sweatshirts", name: "Sweatshirts" },
     { id: "sports", name: "Sports T-shirts" }
   ];
-  
+  const showToast = (message, type = 'info') => {
+    setToast({ message, type });
+  };
+
+  const clearToast = () => {
+    setToast(null);
+  };
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -42,7 +48,7 @@ export default function WomensCollection() {
   
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/products/gender/Female');
+      const response = await axios.get('/api/products/gender/Female');
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -155,7 +161,7 @@ export default function WomensCollection() {
   const handleAddToCart = (product) => {
     const selectedSize = selectedSizes[product._id];
     if (!selectedSize) {
-      alert("Please select a size first");
+      showToast("Please select a size first", 'error');
       return;
     }
     
@@ -167,6 +173,14 @@ export default function WomensCollection() {
   
   return (
     <div className="mens-collection">
+       {/* Toast Notification */}
+       {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={clearToast} 
+        />
+      )}
       <header className="hero" data-aos="fade-down">
         <div className="logo">Udobn</div>
         <h1>Women's Collection</h1>

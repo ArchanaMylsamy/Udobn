@@ -28,7 +28,7 @@ const OrderSuccessPage = () => {
         return;
       }
       
-      const response = await fetch(`http://localhost:5000/api/orders/customer/${customerId}/latest`, {
+      const response = await fetch(`/api/orders/customer/${customerId}/latest`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
