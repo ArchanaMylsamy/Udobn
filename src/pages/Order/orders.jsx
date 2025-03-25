@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingBag, ChevronLeft, Package, Truck, CheckCircle, XCircle, AlertCircle, Calendar, DollarSign } from 'lucide-react';
 import { useCurrency } from '../../context/CurrencyContext';
-
+import Toast from '../../components/Toast';
 const OrderStatusBadge = ({ status }) => {
   const getStatusConfig = (status) => {
     switch (status.toLowerCase()) {
@@ -37,18 +37,26 @@ const CustomerOrdersPage = () => {
   const [error, setError] = useState(null);
   const [customer, setCustomer] = useState(null);
   const { currency, country } = useCurrency();
+const [toast, setToast] = useState(null);
+const showToast = (message, type = 'info') => {
+  setToast({ message, type });
+};
 
+const clearToast = () => {
+  setToast(null);
+};
   useEffect(() => {
     const fetchCustomerOrders = async () => {
       setLoading(true);
       const userId = sessionStorage.getItem('userId');
       if (!userId) {
-        alert("Please log in to view your orders.");
+        
+        showToast("Please log in to view your orders.", 'error');
         return;
       }
       try {
         // Update the API endpoint to match your backend
-        const response = await fetch(`http://localhost:5000/api/orders/customer/${userId}`);
+        const response = await fetch(`/api/orders/customer/${userId}`);
         
         if (!response.ok) {
           const errorData = await response.json();
@@ -117,6 +125,14 @@ const CustomerOrdersPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+       {/* Toast Notification */}
+             {toast && (
+              <Toast 
+                message={toast.message} 
+                type={toast.type} 
+                onClose={clearToast} 
+              />
+            )}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold flex items-center">

@@ -738,7 +738,7 @@ const showCustomAlert = (message, options = {}) => {
           }));
           
           // Send data to backend using fetch
-          fetch('http://localhost:5000/api/email/send-design', {
+          fetch('/api/email/send-design', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

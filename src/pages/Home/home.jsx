@@ -22,6 +22,9 @@ const CuratedBrands = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        const response = await axios.get("/api/products/latest");
+        console.log(response)
+        setProducts(response.data);
         const response = await axios.get("http://localhost:5000/api/products/latest");
         
         if (Array.isArray(response.data)) {

@@ -5,7 +5,7 @@ import { useCurrency } from '../../context/CurrencyContext';
 import logo from '../../assets/udobn_logo.png';
 import { useLocation } from 'react-router-dom';
 import razorpay from '../../assets/razorpay.png';
-
+import Toast from "../../components/Toast";
 export default function CheckoutPage() {
   const location = useLocation();
   useEffect(() => {
@@ -20,7 +20,14 @@ export default function CheckoutPage() {
   
   // Calculate shipping fee based on current currency
   const shippingFee = currency === 'USD' ? 0 : 0;
+  const [toast, setToast] = useState(null);
+  const showToast = (message, type = 'info') => {
+    setToast({ message, type });
+  };
   
+  const clearToast = () => {
+    setToast(null);
+  };
   // Calculate cart subtotal based on currency
   const calculateSubtotal = () => {
     if (!cart || cart.length === 0) return 0;
@@ -83,7 +90,8 @@ export default function CheckoutPage() {
   const handlePlaceOrder = async () => {
     const customerId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
     if (!customerId) {
-      alert("Please log in to place an order.");
+      showToast("Please log in to place an order.", 'error');
+     
       return;
     }
   
@@ -105,7 +113,8 @@ export default function CheckoutPage() {
     // Form validation
     if (!orderData.firstName || !orderData.lastName || !orderData.email || !orderData.phone || 
         !orderData.address || !orderData.city || !orderData.state || !orderData.zipCode) {
-      alert("Please fill all required fields.");
+     
+      showToast("Please fill all required fields.", 'error');
       return;
     }
   
@@ -123,7 +132,7 @@ export default function CheckoutPage() {
   
     try {
       if (paymentMethod === "COD") {
-        const response = await fetch('http://localhost:5000/api/orders', {
+        const response = await fetch('/api/orders', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -150,18 +159,21 @@ export default function CheckoutPage() {
         const result = await response.json();
   
         if (response.ok) {
-          alert('Order placed successfully!');
+          
+          showToast("Order placed successfully!", 'success');
           localStorage.removeItem("cart");
           window.location.href = "/order-success";
         } else {
-          alert('Failed to place order: ' + result.message);
+          showToast('Failed to place order: ' + result.message, 'error');
+          
         }
       } else if (paymentMethod === "razorpay") {
         initiateRazorpayPayment(orderData, totalAmountInr, totalAmountUsd);
       }
     } catch (error) {
       console.error("Error placing order:", error);
-      alert("Unable to place order. Please try again.");
+      showToast("Unable to place order. Please try again.", 'error');
+      
     }
   };
   
@@ -180,7 +192,7 @@ export default function CheckoutPage() {
       }
       
       // Step 1: Call your backend to create a Razorpay order with the current currency
-      const response = await fetch('http://localhost:5000/api/razorpay/create-order', {
+      const response = await fetch('/api/razorpay/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -240,13 +252,15 @@ export default function CheckoutPage() {
       razorpayInstance.on('payment.failed', function(response){
         // When payment fails, create order with failed status
         createOrder(orderData, "Failed", response.error.description, totalAmountInr, totalAmountUsd);
-        alert("Payment failed. " + response.error.description);
+       
+        showToast("Payment failed. " + response.error.description, 'error');
       });
       razorpayInstance.open();
       
     } catch (error) {
       console.error("Error creating order:", error);
-      alert("Unable to initiate payment. Please try again.");
+      showToast("Unable to initiate payment. Please try again.", 'error');
+      
     }
   };
   
@@ -264,7 +278,7 @@ export default function CheckoutPage() {
       }));
   
       // Send payment verification details to backend
-      const response = await fetch('http://localhost:5000/api/razorpay/verify-payment', {
+      const response = await fetch('/api/razorpay/verify-payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -296,19 +310,22 @@ export default function CheckoutPage() {
       if (result.success) {
         // Payment verification successful - create order with paid status
         createOrder(orderData, "Paid", paymentResponse.razorpay_payment_id, totalAmountInr, totalAmountUsd);
-        alert("Payment successful! Order placed.");
+        
+        showToast("Payment successful! Order placed.", 'success');
         localStorage.removeItem("cart"); // Clear cart
         window.location.href = "/order-success"; // Redirect to success page
       } else {
         // Payment verification failed - create order with failed status
         createOrder(orderData, "Failed", "Verification failed", totalAmountInr, totalAmountUsd);
-        alert("Payment verification failed. Please contact support.");
+       
+        showToast("Payment verification failed. Please contact support.", 'warning');
       }
     } catch (error) {
       console.error("Error verifying payment:", error);
       // Create order with failed status in case of exception
       createOrder(orderData, "Failed", "Verification error", totalAmountInr, totalAmountUsd);
-      alert("Unable to verify payment. Please contact support.");
+      
+      showToast("Unable to verify payment. Please contact support.", 'error');
     }
   };
   
@@ -338,7 +355,7 @@ export default function CheckoutPage() {
       }));
       
       // Create order in the database
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -378,6 +395,14 @@ export default function CheckoutPage() {
 
   return (
     <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto p-6">
+       {/* Toast Notification */}
+                   {toast && (
+                    <Toast 
+                      message={toast.message} 
+                      type={toast.type} 
+                      onClose={clearToast} 
+                    />
+                  )}
       {/* Left Column - Billing Details */}
       <div className="w-full md:w-3/5">
         <h2 className="text-2xl font-bold mb-6">BILLING DETAILS</h2>

@@ -3,6 +3,38 @@ import { motion } from 'framer-motion';
 import { Truck, MapPin, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+// Custom Toast Component
+const Toast = ({ message, type, onClose }) => {
+  React.useEffect(() => {
+    const timer = setTimeout(onClose, 5000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const typeStyles = {
+    success: 'bg-green-100 border-green-400 text-green-700',
+    error: 'bg-red-100 border-red-400 text-red-700',
+    info: 'bg-blue-100 border-blue-400 text-blue-700',
+    warning: 'bg-yellow-100 border-yellow-400 text-yellow-700'
+  };
+
+  return (
+    <div 
+      className={`fixed top-4 right-4 z-50 px-4 py-3 border-l-4 rounded-lg shadow-lg ${typeStyles[type]} transition-all duration-300 ease-in-out`}
+      role="alert"
+    >
+      <div className="flex items-center justify-between">
+        <p className="text-sm">{message}</p>
+        <button 
+          onClick={onClose} 
+          className="ml-4 text-gray-500 hover:text-gray-800 focus:outline-none"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const FeatureCard = ({ icon: Icon, text }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -27,6 +59,7 @@ const RegistrationForm = () => {
     address: '',
     phone: ''
   });
+  const [toast, setToast] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -35,10 +68,18 @@ const RegistrationForm = () => {
     });
   };
 
+  const showToast = (message, type = 'info') => {
+    setToast({ message, type });
+  };
+
+  const clearToast = () => {
+    setToast(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/customers/register', {
+      const response = await fetch('/api/customers/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -48,19 +89,29 @@ const RegistrationForm = () => {
 
       const result = await response.json();
       if (response.ok) {
-        alert(result.message);
-        navigate('/login')
+        showToast(result.message, 'success');
+        // Navigate after a short delay to allow toast to be visible
+        setTimeout(() => navigate('/login'), 2000);
       } else {
-        alert(result.message);
+        showToast(result.message, 'error');
       }
     } catch (error) {
       console.error('Error registering:', error);
-      alert('Registration failed. Please try again.');
+      showToast('Registration failed. Please try again.', 'error');
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center px-4 py-12">
+      {/* Toast Notification */}
+      {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={clearToast} 
+        />
+      )}
+
       <div className="w-full max-w-md space-y-8">
         {/* Registration Header */}
         <div className="text-center">
@@ -81,7 +132,7 @@ const RegistrationForm = () => {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -97,7 +148,7 @@ const RegistrationForm = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -129,7 +180,7 @@ const RegistrationForm = () => {
               required
               value={formData.address}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -145,7 +196,7 @@ const RegistrationForm = () => {
               required
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300  focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
@@ -153,7 +204,7 @@ const RegistrationForm = () => {
           <div className="pt-2">
             <button
               type="submit"
-              className="w-auto bg-gray-900 text-white px-8 py-2  hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="w-auto bg-gray-900 text-white px-8 py-2 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
               Create account
             </button>

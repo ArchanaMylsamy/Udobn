@@ -20,7 +20,7 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const response = await axios.get(`/api/products/${id}`);
         setProduct(response.data.product);
         setIsLoading(false);
       } catch (error) {
