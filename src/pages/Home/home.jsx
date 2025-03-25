@@ -23,10 +23,7 @@ const CuratedBrands = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get("/api/products/latest");
-        console.log(response)
         setProducts(response.data);
-        const response = await axios.get("http://localhost:5000/api/products/latest");
-        
         if (Array.isArray(response.data)) {
           setProducts(response.data);
         } else {
@@ -37,7 +34,6 @@ const CuratedBrands = () => {
         setProducts([]); // Handle errors safely
       }
     };
-  
     fetchProducts();
   }, []);  
 
