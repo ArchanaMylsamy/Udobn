@@ -48,7 +48,7 @@ export default function WomensCollection() {
   
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/products/gender/Female');
+      const response = await axios.get('https://udobn-backend.vercel.app/api/products/gender/Female');
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
