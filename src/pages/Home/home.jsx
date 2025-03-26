@@ -9,6 +9,7 @@ import cloth_3 from '../../assets/cloth-3.jpg'
 import shoe_1 from '../../assets/shoe-1.jpg'
 import shoe_2 from '../../assets/shoe-2.jpg'
 import { useCurrency } from '../../context/CurrencyContext';
+const API_BASE_URL="https://udobn-backend.vercel.app"
 const CuratedBrands = () => {
   const location = useLocation();
   const [products, setProducts] = useState([]);
@@ -22,7 +23,7 @@ const CuratedBrands = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("/api/products/latest");
+        const response = await axios.get(`${API_BASE_URL}/api/products/latest`);
         if (Array.isArray(response.data)) {
           setProducts(response.data);
         } else {

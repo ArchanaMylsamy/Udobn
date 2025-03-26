@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Truck, MapPin, Tag } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
+const API_BASE_URL="https://udobn-backend.vercel.app"
 // Custom Toast Component
 const Toast = ({ message, type, onClose }) => {
   useEffect(() => {
@@ -56,7 +56,7 @@ const PasswordResetForm = ({ onCancel, showToast }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/reset-password', {
+      const response = await fetch(`${API_BASE_URL}/api/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/customers/login', {
+      const response = await fetch(`${API_BASE_URL}/api/customers/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

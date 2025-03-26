@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Truck, MapPin, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+const API_BASE_URL="https://udobn-backend.vercel.app"
 // Custom Toast Component
 const Toast = ({ message, type, onClose }) => {
   React.useEffect(() => {
@@ -79,7 +79,7 @@ const RegistrationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/customers/register', {
+      const response = await fetch(`${API_BASE_URL}/api/customers/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import contact from '../../assets/contact.webp';
 import { Truck, MapPin, Tag } from "lucide-react"
+const API_BASE_URL="https://udobn-backend.vercel.app"
 const FeatureCard = ({ icon: Icon, text }) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -28,7 +29,7 @@ export default function ContactPage() {
     setStatus("Sending...");
 
     try {
-      const response = await axios.post("/api/email/send-email", formData);
+      const response = await axios.post(`${API_BASE_URL}/api/email/send-email`, formData);
       setStatus(response.data.message);
     } catch (error) {
       setStatus("Failed to send email.");

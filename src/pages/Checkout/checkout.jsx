@@ -6,6 +6,7 @@ import logo from '../../assets/udobn_logo.png';
 import { useLocation } from 'react-router-dom';
 import razorpay from '../../assets/razorpay.png';
 import Toast from "../../components/Toast";
+const API_BASE_URL="https://udobn-backend.vercel.app"
 export default function CheckoutPage() {
   const location = useLocation();
   useEffect(() => {
@@ -132,7 +133,7 @@ export default function CheckoutPage() {
   
     try {
       if (paymentMethod === "COD") {
-        const response = await fetch('/api/orders', {
+        const response = await fetch(`${API_BASE_URL}/api/orders`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -192,7 +193,7 @@ export default function CheckoutPage() {
       }
       
       // Step 1: Call your backend to create a Razorpay order with the current currency
-      const response = await fetch('/api/razorpay/create-order', {
+      const response = await fetch(`${API_BASE_URL}/api/razorpay/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -278,7 +279,7 @@ export default function CheckoutPage() {
       }));
   
       // Send payment verification details to backend
-      const response = await fetch('/api/razorpay/verify-payment', {
+      const response = await fetch(`${API_BASE_URL}/api/razorpay/verify-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -355,7 +356,7 @@ export default function CheckoutPage() {
       }));
       
       // Create order in the database
-      const response = await fetch('/api/orders', {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

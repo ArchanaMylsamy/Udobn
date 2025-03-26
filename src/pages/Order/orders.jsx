@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ShoppingBag, ChevronLeft, Package, Truck, CheckCircle, XCircle, AlertCircle, Calendar, DollarSign } from 'lucide-react';
 import { useCurrency } from '../../context/CurrencyContext';
 import Toast from '../../components/Toast';
+const API_BASE_URL="https://udobn-backend.vercel.app"
 const OrderStatusBadge = ({ status }) => {
   const getStatusConfig = (status) => {
     switch (status.toLowerCase()) {
@@ -56,7 +57,7 @@ const clearToast = () => {
       }
       try {
         // Update the API endpoint to match your backend
-        const response = await fetch(`/api/orders/customer/${userId}`);
+        const response = await fetch(`${API_BASE_URL}/api/orders/customer/${userId}`);
         
         if (!response.ok) {
           const errorData = await response.json();

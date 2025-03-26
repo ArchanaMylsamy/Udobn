@@ -9,7 +9,7 @@ import { useCurrency } from '../../context/CurrencyContext';
 import axios from "axios";
 import ProductImageCarousel from "../../components/ProductImageCarousel"; // Import the new component
 import Toast from "../../components/Toast";
-
+const API_BASE_URL="https://udobn-backend.vercel.app"
 export default function MensCollection() {
   const navigate = useNavigate();
   const { addToCart, cartItemsCount, setIsCartOpen, currency } = useCart();
@@ -49,7 +49,7 @@ export default function MensCollection() {
   
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/products/gender/Male');
+      const response = await axios.get(`${API_BASE_URL}/api/products/gender/Male`);
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);

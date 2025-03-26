@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
+const API_BASE_URL="https://udobn-backend.vercel.app"
 const OrderSuccessPage = () => {
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ const OrderSuccessPage = () => {
         return;
       }
       
-      const response = await fetch(`/api/orders/customer/${customerId}/latest`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/customer/${customerId}/latest`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

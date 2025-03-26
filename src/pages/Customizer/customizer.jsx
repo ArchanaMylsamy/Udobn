@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Image, Rect, Circle, Star, Text, Transformer, Path, RegularPolygon } from 'react-konva';
-
+const API_BASE_URL="https://udobn-backend.vercel.app"
 const TShirtCustomizer = () => {
   // State for t-shirt base color
   const [shirtColor, setShirtColor] = useState('#ffffff');
@@ -738,7 +738,7 @@ const showCustomAlert = (message, options = {}) => {
           }));
           
           // Send data to backend using fetch
-          fetch('/api/email/send-design', {
+          fetch(`${API_BASE_URL}/api/email/send-design`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

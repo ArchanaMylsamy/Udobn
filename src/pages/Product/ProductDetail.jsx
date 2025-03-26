@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 import { useCurrency } from '../../context/CurrencyContext';
 import SimpleCart from '../../components/Cart';
-
+const API_BASE_URL="https://udobn-backend.vercel.app"
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`/api/products/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/api/products/${id}`);
         setProduct(response.data.product);
         setIsLoading(false);
       } catch (error) {
